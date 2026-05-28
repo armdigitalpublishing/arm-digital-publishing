@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Estates — ARM Digital Publishing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F8F2ED;
+  --bg2: #F0E6DC;
+  --white: #FFFFFF;
+  --ink: #1C0E08;
+  --ink-mid: #4A2A1A;
+  --ink-soft: #8A5A44;
+  --ink-faint: #C4A090;
+  --coral: #B84E2A;
+  --coral2: #D4693E;
+  --coral-dark: #7A2E12;
+  --coral-pale: rgba(184,78,42,0.08);
+  --sand: #E8D5C0;
+  --black: #0F0804;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+.cur-dot{position:fixed;width:8px;height:8px;background:var(--coral);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+.cur-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(184,78,42,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s cubic-bezier(.16,1,.3,1),height .2s cubic-bezier(.16,1,.3,1);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(248,242,237,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(184,78,42,0.1);}
+.nav-back{display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--coral);}
+.nav-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;color:var(--ink);text-decoration:none;}
+.nav-logo-dot{color:var(--coral);}
+.nav-right{display:flex;align-items:center;gap:24px;}
+.nav-div-link{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-div-link:hover{color:var(--coral);}
+.nav-cta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);background:var(--coral-dark);padding:9px 18px;text-decoration:none;border-radius:2px;transition:background .2s;}
+.nav-cta:hover{background:var(--coral);}
+
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 48px 72px;position:relative;overflow:hidden;background:var(--black);}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(80px,13vw,220px);line-height:1;letter-spacing:-0.04em;color:rgba(184,78,42,0.06);white-space:nowrap;pointer-events:none;}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;}
+.hero-blob-1{width:600px;height:600px;top:-80px;right:-60px;background:rgba(184,78,42,0.18);animation:blobFloat 14s ease-in-out infinite;}
+.hero-blob-2{width:400px;height:400px;bottom:-60px;left:-40px;background:rgba(122,46,18,0.14);animation:blobFloat 11s ease-in-out infinite reverse;}
+@keyframes blobFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-16px)}}
+
+.hero-division-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--coral2);margin-bottom:24px;display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp .7s .3s ease forwards;}
+.hero-division-label::before{content:'';width:20px;height:1px;background:var(--coral2);}
+.hero-title{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(48px,8vw,124px);line-height:0.9;letter-spacing:-0.03em;color:var(--white);margin-bottom:48px;position:relative;z-index:1;}
+.hero-title-row{display:block;overflow:hidden;}
+.hero-title-inner{display:block;transform:translateY(105%);opacity:0;}
+.r1 .hero-title-inner{animation:slideUp .85s .4s cubic-bezier(.16,1,.3,1) forwards;}
+.r2 .hero-title-inner{animation:slideUp .85s .55s cubic-bezier(.16,1,.3,1) forwards;}
+.r3 .hero-title-inner{animation:slideUp .85s .7s cubic-bezier(.16,1,.3,1) forwards;}
+@keyframes slideUp{to{transform:translateY(0);opacity:1;}}
+.hero-title-coral{color:var(--coral2);}
+
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 1s ease forwards;position:relative;z-index:1;}
+.hero-desc{max-width:420px;font-size:14px;line-height:1.85;color:rgba(248,242,237,0.6);font-weight:300;}
+.hero-principle{font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;color:var(--coral2);opacity:0.8;max-width:280px;text-align:right;line-height:1.4;}
+
+.divider{height:48px;overflow:hidden;background:var(--coral);display:flex;align-items:center;}
+.divider-track{display:flex;animation:ticker 22s linear infinite;white-space:nowrap;}
+.divider-item{display:inline-flex;align-items:center;gap:16px;padding:0 28px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(248,242,237,0.5);}
+.divider-gem{font-size:10px;opacity:0.6;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.section{padding:100px 48px;}
+.section-alt{background:var(--white);}
+.section-dark{background:var(--black);}
+.section-sand{background:var(--bg2);}
+
+.section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--coral);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-label::before{content:'';width:20px;height:1px;background:var(--coral);}
+.section-label-light{color:var(--coral2);}
+.section-label-light::before{background:var(--coral2);}
+
+.section-heading{font-family:'Unbounded',sans-serif;font-weight:800;font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-0.025em;color:var(--ink);margin-bottom:24px;}
+.section-heading em{color:var(--coral);font-style:normal;}
+.section-body{font-size:15px;line-height:1.9;color:var(--ink-mid);font-weight:300;max-width:580px;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;}
+
+.pillar-card{padding:32px;background:var(--bg2);border:1px solid rgba(184,78,42,0.12);border-radius:12px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.pillar-card:hover{border-color:var(--coral);transform:translateY(-3px);}
+.pillar-card-accent{position:absolute;top:0;left:0;right:0;height:2px;background:var(--coral);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.pillar-card:hover .pillar-card-accent{transform:scaleX(1);}
+.pillar-card-num{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--ink-faint);margin-bottom:16px;}
+.pillar-card-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.02em;color:var(--ink);margin-bottom:10px;line-height:1.2;}
+.pillar-card-body{font-size:13px;line-height:1.8;color:var(--ink-mid);font-weight:300;}
+
+.phase-row{display:flex;align-items:flex-start;gap:24px;padding:24px 0;border-bottom:1px solid rgba(28,14,8,0.07);transition:padding-left .25s;}
+.phase-row:first-child{border-top:1px solid rgba(28,14,8,0.07);}
+.phase-row:hover{padding-left:10px;}
+.phase-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--coral);flex-shrink:0;width:80px;padding-top:3px;}
+.phase-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:6px;}
+.phase-body{font-size:13px;line-height:1.75;color:var(--ink-mid);font-weight:300;}
+
+.revenue-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px;}
+.rev-item{padding:20px;background:var(--bg2);border:1px solid rgba(184,78,42,0.1);border-radius:10px;transition:border-color .3s,transform .3s;}
+.rev-item:hover{border-color:var(--coral);transform:translateY(-2px);}
+.rev-num{font-family:'Unbounded',sans-serif;font-weight:900;font-size:28px;color:var(--coral);line-height:1;margin-bottom:6px;}
+.rev-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
+
+.manifesto-line{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(26px,4.5vw,68px);line-height:1.0;padding:18px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;color:rgba(248,242,237,0.1);transition:color .4s;cursor:default;}
+.manifesto-line:first-child{border-top:1px solid rgba(255,255,255,0.06);}
+.manifesto-line:hover{color:rgba(248,242,237,0.9);}
+.manifesto-line.accent{color:var(--coral2);opacity:0.8;}
+.manifesto-line.accent:hover{opacity:1;}
+.manifesto-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(248,242,237,0.2);transition:color .4s;}
+.manifesto-line:hover .manifesto-tag{color:rgba(248,242,237,0.4);}
+
+#cta{padding:120px 48px;background:var(--coral);text-align:center;position:relative;overflow:hidden;}
+#cta::before{content:'';position:absolute;bottom:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:rgba(0,0,0,0.06);pointer-events:none;}
+.cta-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(28,14,8,0.45);margin-bottom:20px;}
+.cta-heading{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(32px,5vw,68px);line-height:0.95;letter-spacing:-0.03em;color:var(--white);margin-bottom:32px;position:relative;z-index:1;}
+.cta-body{font-size:15px;line-height:1.8;color:rgba(255,255,255,0.65);max-width:480px;margin:0 auto 40px;font-weight:300;}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--coral-dark);background:var(--white);padding:16px 32px;text-decoration:none;border-radius:2px;transition:background .25s,transform .2s;position:relative;z-index:1;}
+.cta-btn:hover{background:var(--bg);transform:translateY(-2px);}
+
+footer{background:var(--black);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;color:rgba(248,242,237,0.3);}
+.footer-logo-dot{color:var(--coral2);}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-link{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,242,237,0.2);text-decoration:none;transition:color .2s;}
+.footer-link:hover{color:var(--coral2);}
+.footer-copy{font-family:'DM Mono',monospace;font-size:8px;color:rgba(248,242,237,0.12);}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}.rd4{transition-delay:.32s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  .cur-dot,.cur-ring{display:none;}body{cursor:auto;}
+  nav{padding:0 20px;}.nav-div-link{display:none;}
+  #hero{padding:80px 20px 48px;}
+  .hero-bottom{flex-direction:column;align-items:flex-start;}.hero-principle{text-align:left;}
+  .section{padding:64px 20px;}
+  .two-col{grid-template-columns:1fr;gap:40px;}
+  .three-col{grid-template-columns:1fr;gap:16px;}
+  .revenue-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .section-heading{font-size:clamp(24px,7vw,38px);}
+  .manifesto-line{font-size:clamp(20px,5.5vw,34px);flex-direction:column;align-items:flex-start;gap:4px;padding:12px 0;}
+  #cta{padding:72px 20px;}
+  footer{flex-direction:column;align-items:flex-start;padding:28px 20px;}
+}
+@media(min-width:769px)and(max-width:1024px){
+  nav{padding:0 32px;}#hero{padding:90px 32px 56px;}.section{padding:72px 32px;}
+  .three-col{grid-template-columns:1fr 1fr;}
+  .revenue-grid{grid-template-columns:repeat(4,1fr);}
+  footer{padding:28px 32px;}
+}
+</style>
+</head>
+<body>
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-back">← ARM Digital Publishing</a>
+  <a href="index.html" class="nav-logo">ARM<span class="nav-logo-dot">.</span>DP</a>
+  <div class="nav-right">
+    <a href="advisory.html" class="nav-div-link">Advisory</a>
+    <a href="products.html" class="nav-div-link">Products</a>
+    <a href="governance.html" class="nav-div-link">Governance</a>
+    <a href="#cta" class="nav-cta">Enquire</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg-text">ESTATES</div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-division-label">Division 04 — Digital Estates</div>
+  <h1 class="hero-title">
+    <span class="hero-title-row r1"><span class="hero-title-inner">ARRIVE</span></span>
+    <span class="hero-title-row r2"><span class="hero-title-inner">BEFORE</span></span>
+    <span class="hero-title-row r3"><span class="hero-title-inner"><span class="hero-title-coral">EVERYONE.</span></span></span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">ARM Digital Estates identifies markets where digital infrastructure does not yet exist — claims that territory and builds the platforms that become the definitive destination before the algorithms catch up.</p>
+    <p class="hero-principle">"First movers own the territory."</p>
+  </div>
+</section>
+
+<div class="divider">
+  <div class="divider-track">
+    <span class="divider-item">Territory Acquisition<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Emerging Markets<span class="divider-gem">◆</span></span>
+    <span class="divider-item">First-Mover Infrastructure<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Compounding Platforms<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Digital Real Estate<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Territory Acquisition<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Emerging Markets<span class="divider-gem">◆</span></span>
+    <span class="divider-item">First-Mover Infrastructure<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Compounding Platforms<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Digital Real Estate<span class="divider-gem">◆</span></span>
+  </div>
+</div>
+
+<section class="section section-alt">
+  <div class="two-col">
+    <div class="reveal">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-heading">We claim <em>digital territory</em> before anyone else arrives.</h2>
+    </div>
+    <div class="reveal rd2">
+      <p class="section-body">ARM Digital Estates is not a property agency. It is not a content studio. It is a first-mover digital infrastructure operation — identifying markets where the internet has not yet properly served an audience, and building the platform that owns that territory permanently.</p>
+      <p class="section-body" style="margin-top:16px;">Every platform we build is designed to become the definitive destination for its market — arriving before the algorithms, before the competitors, and before the window closes. We build landmarks, not campaigns.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label reveal">Why It Matters</div>
+  <h2 class="section-heading reveal rd1">The internet has <em>not yet served</em> most of the world.</h2>
+  <div class="three-col" style="margin-top:48px;">
+    <div class="pillar-card reveal rd1">
+      <div class="pillar-card-accent"></div>
+      <div class="pillar-card-num">01</div>
+      <div class="pillar-card-title">The Unclaimed Territory</div>
+      <div class="pillar-card-body">There are markets worldwide — destinations, industries, communities — where credible, well-built, audience-specific digital infrastructure simply does not exist. These are not niche opportunities. They are wide-open territory.</div>
+    </div>
+    <div class="pillar-card reveal rd2">
+      <div class="pillar-card-accent"></div>
+      <div class="pillar-card-num">02</div>
+      <div class="pillar-card-title">The Compound Effect</div>
+      <div class="pillar-card-body">A platform that owns its territory compounds — domain authority, audience trust, search rankings, and brand recognition all build over time. The first credible platform in a market is structurally advantaged over every competitor that follows.</div>
+    </div>
+    <div class="pillar-card reveal rd3">
+      <div class="pillar-card-accent"></div>
+      <div class="pillar-card-num">03</div>
+      <div class="pillar-card-title">The Partnership Model</div>
+      <div class="pillar-card-body">ARM provides the strategic architecture, platform build, content infrastructure, and commercial framework. Local partners provide the on-the-ground presence, audience, and operational execution. Together, the result is a platform neither could build alone.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="two-col">
+    <div>
+      <div class="section-label reveal">How We Build</div>
+      <h2 class="section-heading reveal rd1">Four phases.<br><em>Eight revenue streams.</em></h2>
+      <p class="section-body reveal rd2" style="margin-top:16px;">Every ARM Digital Estates project follows a phased build — starting with content and audience authority, then activating commercial layers as the platform's credibility grows.</p>
+      <div class="revenue-grid reveal rd3">
+        <div class="rev-item"><div class="rev-num">8</div><div class="rev-label">Revenue streams per platform</div></div>
+        <div class="rev-item"><div class="rev-num">4</div><div class="rev-label">Build phases</div></div>
+        <div class="rev-item"><div class="rev-num">∞</div><div class="rev-label">Compounding domain authority</div></div>
+        <div class="rev-item"><div class="rev-num">1st</div><div class="rev-label">Mover in every market</div></div>
+      </div>
+    </div>
+    <div class="reveal rd2">
+      <div class="phase-row">
+        <div class="phase-tag">Phase 01</div>
+        <div><div class="phase-title">Content Platform</div><div class="phase-body">SEO foundation, editorial destination, affiliate revenue. Establish domain authority and audience before any transactional layer is introduced. The credibility layer everything else is built on.</div></div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-tag">Phase 02</div>
+        <div><div class="phase-title">Verified Listings</div><div class="phase-body">Video-forward verified listings and booking service — the first transactional layer, introduced once the content platform has established trust and audience with the target market.</div></div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-tag">Phase 03</div>
+        <div><div class="phase-title">Full Commercial Layer</div><div class="phase-body">Full listings, commission-based revenue, and developer or vendor partnerships. The platform expands into higher-value transactions as its authority in the market is established.</div></div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-tag">Phase 04</div>
+        <div><div class="phase-title">White-Glove Services</div><div class="phase-body">Concierge and procurement services for the highest-value segment — buyers and relocators who want a trusted human intermediary rather than a self-service platform.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="section-label reveal section-label-light">What We Believe</div>
+  <div class="reveal rd1" style="margin-top:8px;">
+    <div class="manifesto-line accent"><span>ARRIVE BEFORE EVERYONE ELSE.</span><span class="manifesto-tag">Principle</span></div>
+    <div class="manifesto-line"><span>FIRST MOVERS OWN THE TERRITORY.</span><span class="manifesto-tag">Strategy</span></div>
+    <div class="manifesto-line"><span>BUILD TO COMPOUND.</span><span class="manifesto-tag">Method</span></div>
+    <div class="manifesto-line"><span>THE INTERNET HAS NOT SERVED MOST OF THE WORLD.</span><span class="manifesto-tag">Opportunity</span></div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="cta-label reveal">Partner With Us</div>
+  <h2 class="cta-heading reveal rd1">See an unclaimed<br>territory?</h2>
+  <p class="cta-body reveal rd2">ARM Digital Estates is always looking for the next market — and the right on-the-ground partner to build it with. If you have local presence, audience, and a market that the internet hasn't properly served yet, reach out.</p>
+  <a href="mailto:estates@armdigitalpublishing.com" class="cta-btn reveal rd3">Start the conversation →</a>
+</section>
+
+<footer>
+  <span class="footer-logo">ARM<span class="footer-logo-dot">.</span>Digital Publishing</span>
+  <div class="footer-links">
+    <a href="index.html" class="footer-link">Home</a>
+    <a href="advisory.html" class="footer-link">Advisory & Works</a>
+    <a href="products.html" class="footer-link">Digital Products</a>
+    <a href="governance.html" class="footer-link">AI Governance</a>
+    <a href="publication.html" class="footer-link">Current Future</a>
+  </div>
+  <span class="footer-copy">© 2025 ARM Digital Publishing.</span>
+</footer>
+
+<script>
+const dot=document.getElementById('curDot'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+const isTouch=window.matchMedia('(hover:none)').matches;
+if(!isTouch){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function a(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+  document.querySelectorAll('a,.pillar-card,.phase-row,.rev-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{dot.style.width='12px';dot.style.height='12px';ring.style.width='48px';ring.style.height='48px';});
+    el.addEventListener('mouseleave',()=>{dot.style.width='8px';dot.style.height='8px';ring.style.width='34px';ring.style.height='34px';});
+  });
+}
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

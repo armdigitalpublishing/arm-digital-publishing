@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advisory & Works — ARM Digital Publishing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F2E8;
+  --bg2: #EFE8D6;
+  --bg3: #E6DCC4;
+  --ink: #1A1508;
+  --ink-mid: #4A3F28;
+  --ink-soft: #8A7850;
+  --ink-faint: #C4B898;
+  --gold: #C9A84C;
+  --gold2: #E8C96A;
+  --gold-dark: #8A6E2A;
+  --gold-pale: rgba(201,168,76,0.1);
+  --white: #FFFFFF;
+  --black: #0A0800;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+.cur-dot{position:fixed;width:8px;height:8px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+.cur-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(201,168,76,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s cubic-bezier(.16,1,.3,1),height .2s cubic-bezier(.16,1,.3,1);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(247,242,232,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,21,8,0.08);}
+.nav-back{display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.nav-back-arrow{font-size:14px;}
+.nav-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.04em;color:var(--ink);text-decoration:none;}
+.nav-logo-dot{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:24px;}
+.nav-div-link{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-div-link:hover{color:var(--gold);}
+.nav-cta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);background:var(--ink);padding:9px 18px;text-decoration:none;border-radius:2px;transition:background .2s;}
+.nav-cta:hover{background:var(--gold-dark);}
+
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 48px 72px;position:relative;overflow:hidden;background:var(--black);}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(120px,18vw,280px);line-height:1;letter-spacing:-0.04em;color:rgba(201,168,76,0.04);white-space:nowrap;pointer-events:none;user-select:none;}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;}
+.hero-blob-1{width:600px;height:600px;top:-100px;right:-100px;background:rgba(201,168,76,0.12);animation:blobFloat 14s ease-in-out infinite;}
+.hero-blob-2{width:400px;height:400px;bottom:-50px;left:-50px;background:rgba(138,110,42,0.1);animation:blobFloat 10s ease-in-out infinite reverse;}
+@keyframes blobFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-20px)}}
+
+.hero-division-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp .7s .3s ease forwards;}
+.hero-division-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+.hero-title{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(52px,8.5vw,130px);line-height:0.9;letter-spacing:-0.03em;color:var(--white);margin-bottom:48px;position:relative;z-index:1;}
+.hero-title-row{display:block;overflow:hidden;}
+.hero-title-inner{display:block;transform:translateY(105%);opacity:0;}
+.r1 .hero-title-inner{animation:slideUp .85s .4s cubic-bezier(.16,1,.3,1) forwards;}
+.r2 .hero-title-inner{animation:slideUp .85s .55s cubic-bezier(.16,1,.3,1) forwards;}
+.r3 .hero-title-inner{animation:slideUp .85s .7s cubic-bezier(.16,1,.3,1) forwards;}
+@keyframes slideUp{to{transform:translateY(0);opacity:1;}}
+.hero-title-gold{color:var(--gold);}
+
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 1s ease forwards;position:relative;z-index:1;}
+.hero-desc{max-width:420px;font-size:14px;line-height:1.85;color:rgba(247,242,232,0.6);font-weight:300;}
+.hero-principle{font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;color:var(--gold);opacity:0.7;max-width:280px;text-align:right;line-height:1.4;}
+
+.divider{height:48px;overflow:hidden;background:var(--gold);display:flex;align-items:center;}
+.divider-track{display:flex;animation:ticker 20s linear infinite;white-space:nowrap;}
+.divider-item{display:inline-flex;align-items:center;gap:16px;padding:0 28px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--black);opacity:0.6;}
+.divider-gem{opacity:1;font-size:10px;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.section{padding:100px 48px;}
+.section-alt{background:var(--white);}
+.section-dark{background:var(--black);}
+
+.section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+
+.section-heading{font-family:'Unbounded',sans-serif;font-weight:800;font-size:clamp(32px,4vw,56px);line-height:1.05;letter-spacing:-0.025em;color:var(--ink);margin-bottom:24px;}
+.section-heading em{color:var(--gold);font-style:normal;}
+.section-heading-white{color:var(--white);}
+.section-heading-white em{color:var(--gold);}
+
+.section-body{font-size:15px;line-height:1.9;color:var(--ink-mid);font-weight:300;max-width:580px;}
+.section-body-white{color:rgba(247,242,232,0.6);}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;}
+
+.pillar-card{padding:32px;background:var(--bg2);border:1px solid rgba(201,168,76,0.15);border-radius:12px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.pillar-card:hover{border-color:var(--gold);transform:translateY(-3px);}
+.pillar-card-num{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--ink-faint);margin-bottom:20px;}
+.pillar-card-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--ink);margin-bottom:12px;line-height:1.2;}
+.pillar-card-body{font-size:13px;line-height:1.8;color:var(--ink-mid);font-weight:300;}
+.pillar-card-accent{position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.pillar-card:hover .pillar-card-accent{transform:scaleX(1);}
+
+.phase-list{display:flex;flex-direction:column;gap:0;}
+.phase-item{display:flex;align-items:flex-start;gap:24px;padding:28px 0;border-bottom:1px solid rgba(26,21,8,0.07);transition:padding-left .25s;}
+.phase-item:first-child{border-top:1px solid rgba(26,21,8,0.07);}
+.phase-item:hover{padding-left:12px;}
+.phase-num{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--gold);padding-top:4px;flex-shrink:0;width:32px;}
+.phase-content{}
+.phase-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.02em;color:var(--ink);margin-bottom:6px;}
+.phase-body{font-size:13px;line-height:1.8;color:var(--ink-mid);font-weight:300;}
+
+.for-card{padding:28px 32px;background:var(--bg2);border:1px solid rgba(201,168,76,0.12);border-radius:12px;transition:border-color .3s;}
+.for-card:hover{border-color:var(--gold);}
+.for-card-icon{font-size:28px;margin-bottom:16px;}
+.for-card-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;letter-spacing:-0.01em;color:var(--ink);margin-bottom:8px;}
+.for-card-body{font-size:13px;line-height:1.75;color:var(--ink-mid);font-weight:300;}
+
+.manifesto-line{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(32px,5.5vw,80px);line-height:1.0;padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;color:rgba(247,242,232,0.12);transition:color .4s;cursor:default;}
+.manifesto-line:first-child{border-top:1px solid rgba(255,255,255,0.06);}
+.manifesto-line:hover{color:rgba(247,242,232,0.9);}
+.manifesto-line.gold{color:var(--gold);opacity:0.8;}
+.manifesto-line.gold:hover{opacity:1;}
+.manifesto-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,242,232,0.2);transition:color .4s;}
+.manifesto-line:hover .manifesto-tag{color:rgba(247,242,232,0.4);}
+
+#cta{padding:120px 48px;background:var(--gold);text-align:center;position:relative;overflow:hidden;}
+#cta::before{content:'ARM';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(150px,25vw,320px);color:rgba(0,0,0,0.05);letter-spacing:-0.05em;pointer-events:none;white-space:nowrap;}
+.cta-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(26,21,8,0.5);margin-bottom:20px;}
+.cta-heading{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(36px,5vw,72px);line-height:0.95;letter-spacing:-0.03em;color:var(--black);margin-bottom:32px;position:relative;z-index:1;}
+.cta-body{font-size:15px;line-height:1.8;color:rgba(26,21,8,0.65);max-width:480px;margin:0 auto 40px;font-weight:300;}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--white);background:var(--black);padding:16px 32px;text-decoration:none;border-radius:2px;transition:background .25s,transform .2s;position:relative;z-index:1;}
+.cta-btn:hover{background:var(--ink-mid);transform:translateY(-2px);}
+
+footer{background:var(--black);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.04em;color:rgba(247,242,232,0.3);}
+.footer-logo-dot{color:var(--gold);}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-link{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,242,232,0.2);text-decoration:none;transition:color .2s;}
+.footer-link:hover{color:var(--gold);}
+.footer-copy{font-family:'DM Mono',monospace;font-size:8px;color:rgba(247,242,232,0.12);}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}.rd4{transition-delay:.32s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  .cur-dot,.cur-ring{display:none;}body{cursor:auto;}
+  nav{padding:0 20px;}
+  .nav-right{gap:12px;}.nav-div-link{display:none;}
+  #hero{padding:80px 20px 48px;}
+  .hero-bottom{flex-direction:column;align-items:flex-start;}
+  .hero-principle{text-align:left;}
+  .section{padding:64px 20px;}
+  .two-col{grid-template-columns:1fr;gap:40px;}
+  .three-col{grid-template-columns:1fr;gap:16px;}
+  .section-heading{font-size:clamp(26px,7vw,40px);}
+  .manifesto-line{font-size:clamp(22px,6vw,40px);flex-direction:column;align-items:flex-start;gap:4px;padding:14px 0;}
+  #cta{padding:72px 20px;}
+  footer{flex-direction:column;align-items:flex-start;padding:28px 20px;}
+}
+@media(min-width:769px)and(max-width:1024px){
+  nav{padding:0 32px;}
+  #hero{padding:90px 32px 56px;}
+  .section{padding:72px 32px;}
+  .three-col{grid-template-columns:1fr 1fr;gap:24px;}
+  footer{padding:28px 32px;}
+}
+</style>
+</head>
+<body>
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-back"><span class="nav-back-arrow">←</span> ARM Digital Publishing</a>
+  <a href="index.html" class="nav-logo">ARM<span class="nav-logo-dot">.</span>DP</a>
+  <div class="nav-right">
+    <a href="products.html" class="nav-div-link">Products</a>
+    <a href="governance.html" class="nav-div-link">Governance</a>
+    <a href="estates.html" class="nav-div-link">Estates</a>
+    <a href="#cta" class="nav-cta">Enquire</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg-text">ADVISORY</div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-division-label">Division 01 — Advisory & Works</div>
+  <h1 class="hero-title">
+    <span class="hero-title-row r1"><span class="hero-title-inner">YOU BUILT</span></span>
+    <span class="hero-title-row r2"><span class="hero-title-inner">THIS.</span></span>
+    <span class="hero-title-row r3"><span class="hero-title-inner">NOW <span class="hero-title-gold">OWN IT.</span></span></span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">ARM Advisory & Works exists for founders who have already proven their model — and are ready to stop being the only thing holding it together.</p>
+    <p class="hero-principle">"Don't let the algorithm create you."</p>
+  </div>
+</section>
+
+<div class="divider">
+  <div class="divider-track">
+    <span class="divider-item">Consulting & AI Integration<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Operator to Owner<span class="divider-gem">◆</span></span>
+    <span class="divider-item">The Ascent Model<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Stop Being the Business<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Built to Last<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Consulting & AI Integration<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Operator to Owner<span class="divider-gem">◆</span></span>
+    <span class="divider-item">The Ascent Model<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Stop Being the Business<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Built to Last<span class="divider-gem">◆</span></span>
+  </div>
+</div>
+
+<section class="section section-alt">
+  <div class="two-col">
+    <div class="reveal">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-heading">We redesign the structure <em>you built it on.</em></h2>
+    </div>
+    <div class="reveal rd2">
+      <p class="section-body">Most founders reach a point where the business works — but only because they're in every room. Every decision, every client relationship, every dollar earned runs through them directly. That is not a talent problem. It is a structure problem. ARM Advisory & Works exists to solve it — completely, not partially.</p>
+      <p class="section-body" style="margin-top:16px;">We don't produce reports. We don't hand you a framework and leave. We build the operational infrastructure alongside you — directly, with defined outcomes, until the business runs without you as the bottleneck at every point.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label reveal">Why It Matters</div>
+  <h2 class="section-heading reveal rd1">The ceiling is <em>structural,</em><br>not personal.</h2>
+  <div class="three-col" style="margin-top:48px;">
+    <div class="pillar-card reveal rd1">
+      <div class="pillar-card-accent"></div>
+      <div class="pillar-card-num">01</div>
+      <div class="pillar-card-title">The Operator Trap</div>
+      <div class="pillar-card-body">When every dollar you earn still requires you to show up — that is not ownership. That is employment with better clients and no ceiling. The trap is invisible until you're in it.</div>
+    </div>
+    <div class="pillar-card reveal rd2">
+      <div class="pillar-card-accent"></div>
+      <div class="pillar-card-num">02</div>
+      <div class="pillar-card-title">The AI Opportunity</div>
+      <div class="pillar-card-body">AI has collapsed the barrier to systematisation. What used to require a team of ten can now be architectured by one person who knows how. The window to restructure is open — and it won't stay open.</div>
+    </div>
+    <div class="pillar-card reveal rd3">
+      <div class="pillar-card-accent"></div>
+      <div class="pillar-card-num">03</div>
+      <div class="pillar-card-title">The Compounding Effect</div>
+      <div class="pillar-card-body">A business that runs without your direct presence in every transaction compounds. Your time goes to the highest-leverage decisions — not the ones that simply need to happen.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="two-col">
+    <div>
+      <div class="section-label reveal">How We Work</div>
+      <h2 class="section-heading reveal rd1">Five phases.<br><em>One outcome.</em></h2>
+      <p class="section-body reveal rd2" style="margin-top:16px;">Every engagement follows the same architecture — not because we apply a template, but because the transition from operator to owner always moves through the same terrain.</p>
+    </div>
+    <div class="phase-list reveal rd2">
+      <div class="phase-item">
+        <div class="phase-num">01</div>
+        <div class="phase-content">
+          <div class="phase-title">Read</div>
+          <div class="phase-body">We audit the business as it actually operates — not how it's supposed to work, but how it works when things slip. The gaps are where the structural work begins.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">02</div>
+        <div class="phase-content">
+          <div class="phase-title">Map</div>
+          <div class="phase-body">We extract the methodology from your head. The intellectual and operational logic of the business — documented, structured, transferable.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">03</div>
+        <div class="phase-content">
+          <div class="phase-title">Codify</div>
+          <div class="phase-body">We convert documented processes into deployable infrastructure — operating procedures, decision rules, and AI system architecture.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">04</div>
+        <div class="phase-content">
+          <div class="phase-title">Build</div>
+          <div class="phase-body">We deploy the infrastructure. Integrate systems, automate workflows, establish the operational layer that handles what shouldn't need your judgment every time.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">05</div>
+        <div class="phase-content">
+          <div class="phase-title">Scale</div>
+          <div class="phase-body">We establish the performance architecture that allows you to direct the business from above — rather than operate it from within.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label reveal">Who It's For</div>
+  <h2 class="section-heading reveal rd1">The founder who has <em>already proven</em> the model.</h2>
+  <div class="three-col" style="margin-top:48px;">
+    <div class="for-card reveal rd1">
+      <div class="for-card-icon">🏗</div>
+      <div class="for-card-title">The Solo Operator</div>
+      <div class="for-card-body">Running a business that works — but only because you're in every room. Revenue is real. Quality is high. The problem is structural, not strategic.</div>
+    </div>
+    <div class="for-card reveal rd2">
+      <div class="for-card-icon">⚡</div>
+      <div class="for-card-title">The Transition-Ready Founder</div>
+      <div class="for-card-body">You've tried to delegate before. It produced more work, not less. You need someone who builds the infrastructure, not someone who advises you to build it.</div>
+    </div>
+    <div class="for-card reveal rd3">
+      <div class="for-card-icon">🎯</div>
+      <div class="for-card-title">The AI-Aware Builder</div>
+      <div class="for-card-body">You know AI changes the leverage equation. You want to use it properly — not with generic tools and generic prompts, but as purpose-built infrastructure for your specific operation.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="section-label reveal" style="color:var(--gold);">What We Believe</div>
+  <div class="reveal rd1" style="margin-top:8px;">
+    <div class="manifesto-line gold"><span>OWN THE BUSINESS.</span><span class="manifesto-tag">Principle</span></div>
+    <div class="manifesto-line"><span>STOP BEING IT.</span><span class="manifesto-tag">Corollary</span></div>
+    <div class="manifesto-line"><span>KNOWLEDGE IS THE MOAT.</span><span class="manifesto-tag">Foundation</span></div>
+    <div class="manifesto-line"><span>BUILD TO COMPOUND.</span><span class="manifesto-tag">Method</span></div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="cta-label reveal">Start Here</div>
+  <h2 class="cta-heading reveal rd1">Ready to redesign<br>the structure?</h2>
+  <p class="cta-body reveal rd2">The first conversation is a diagnostic — not a sales call. We read what's actually there, tell you what we find, and be direct about whether there's a path forward from where you are now.</p>
+  <a href="mailto:advisory@armdigitalpublishing.com" class="cta-btn reveal rd3">Start the conversation →</a>
+</section>
+
+<footer>
+  <span class="footer-logo">ARM<span class="footer-logo-dot">.</span>Digital Publishing</span>
+  <div class="footer-links">
+    <a href="index.html" class="footer-link">Home</a>
+    <a href="products.html" class="footer-link">Digital Products</a>
+    <a href="governance.html" class="footer-link">AI Governance</a>
+    <a href="estates.html" class="footer-link">Digital Estates</a>
+    <a href="publication.html" class="footer-link">Current Future</a>
+  </div>
+  <span class="footer-copy">© 2025 ARM Digital Publishing.</span>
+</footer>
+
+<script>
+const dot=document.getElementById('curDot'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+const isTouch=window.matchMedia('(hover:none)').matches;
+if(!isTouch){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function a(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+  document.querySelectorAll('a,.pillar-card,.for-card,.phase-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{dot.style.width='12px';dot.style.height='12px';ring.style.width='48px';ring.style.height='48px';});
+    el.addEventListener('mouseleave',()=>{dot.style.width='8px';dot.style.height='8px';ring.style.width='34px';ring.style.height='34px';});
+  });
+}
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
