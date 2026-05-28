@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARM Digital Publishing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F1EA;
+  --cream2: #EDE8DE;
+  --cream3: #E4DDD0;
+  --ink: #0E0F0D;
+  --ink-mid: #3D3D38;
+  --ink-soft: #888880;
+  --ink-faint: #C2BFB6;
+  --gold: #C9A84C;
+  --gold2: #E8C96A;
+  --gold-pale: rgba(201,168,76,0.1);
+  --teal: #00857A;
+  --teal-pale: rgba(0,133,122,0.08);
+  --violet: #5C3D8F;
+  --violet-pale: rgba(92,61,143,0.08);
+  --coral: #B84E2A;
+  --coral-pale: rgba(184,78,42,0.08);
+  --white: #FFFFFF;
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ─────── */
+.cur-dot {
+  position:fixed; width:8px; height:8px;
+  background:var(--ink); border-radius:50%;
+  pointer-events:none; z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .15s,height .15s,background .2s;
+}
+.cur-ring {
+  position:fixed; width:34px; height:34px;
+  border:1.5px solid rgba(14,15,13,0.25); border-radius:50%;
+  pointer-events:none; z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .2s cubic-bezier(.16,1,.3,1), height .2s cubic-bezier(.16,1,.3,1), border-color .2s;
+}
+
+/* ── NAV ─────────── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  height:60px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px;
+  background:rgba(245,241,234,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(14,15,13,0.08);
+}
+
+.nav-logo {
+  font-family:'Unbounded',sans-serif;
+  font-weight:700; font-size:13px;
+  letter-spacing:0.02em; color:var(--ink);
+  text-decoration:none;
+  opacity:0; animation:fadeDown .6s .2s ease forwards;
+}
+.nav-logo-dot { color:var(--gold); }
+
+.nav-links {
+  display:flex; align-items:center; gap:32px;
+  opacity:0; animation:fadeDown .6s .35s ease forwards;
+}
+.nav-link {
+  font-size:12px; font-weight:400;
+  letter-spacing:0.04em; color:var(--ink-soft);
+  text-decoration:none; transition:color .2s;
+}
+.nav-link:hover { color:var(--ink); }
+
+.nav-cta {
+  font-family:'DM Mono',monospace;
+  font-size:10px; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--white);
+  background:var(--ink); padding:10px 20px;
+  text-decoration:none; border-radius:2px;
+  transition:background .25s, transform .2s;
+}
+.nav-cta:hover { background:var(--ink-mid); transform:translateY(-1px); }
+
+/* ── HERO ────────── */
+#hero {
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  justify-content:center;
+  padding:100px 48px 60px;
+  position:relative; overflow:hidden;
+}
+
+/* Warm texture dots */
+.hero-texture {
+  position:absolute; inset:0; pointer-events:none; overflow:hidden;
+}
+.hero-texture svg { width:100%; height:100%; opacity:0.4; }
+
+/* Colour blobs */
+.blob {
+  position:absolute; border-radius:50%;
+  filter:blur(80px); pointer-events:none;
+  animation:blobFloat 12s ease-in-out infinite;
+}
+.blob-1 { width:500px; height:500px; top:-100px; right:-100px; background:rgba(201,168,76,0.12); animation-delay:0s; }
+.blob-2 { width:400px; height:400px; bottom:0; left:-80px; background:rgba(0,133,122,0.08); animation-delay:-4s; }
+.blob-3 { width:300px; height:300px; top:40%; right:10%; background:rgba(92,61,143,0.07); animation-delay:-8s; }
+@keyframes blobFloat {
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(20px,-20px) scale(1.03)}
+  66%{transform:translate(-15px,15px) scale(0.97)}
+}
+
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--ink-soft); margin-bottom:40px;
+  opacity:0; animation:fadeUp .7s .4s ease forwards;
+}
+.eyebrow-line { width:28px; height:1px; background:var(--gold); }
+
+.hero-title {
+  font-family:'Unbounded',sans-serif;
+  font-weight:900;
+  font-size:clamp(56px, 9.5vw, 148px);
+  line-height:0.9;
+  letter-spacing:-0.03em;
+  color:var(--ink);
+  position:relative; z-index:1;
+  margin-bottom:48px;
+}
+
+.hero-title-row {
+  display:block; overflow:hidden;
+}
+.hero-title-inner {
+  display:block;
+  transform:translateY(105%);
+  opacity:0;
+}
+.r1 .hero-title-inner { animation:slideUp .85s .5s cubic-bezier(.16,1,.3,1) forwards; }
+.r2 .hero-title-inner { animation:slideUp .85s .65s cubic-bezier(.16,1,.3,1) forwards; }
+.r3 .hero-title-inner { animation:slideUp .85s .8s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes slideUp { to{transform:translateY(0);opacity:1;} }
+
+.hero-title-gold { color:var(--gold); }
+.hero-title-stroke {
+  -webkit-text-stroke:2px var(--ink);
+  color:transparent;
+}
+
+.hero-bottom {
+  display:flex; align-items:flex-end;
+  justify-content:space-between; gap:40px;
+  flex-wrap:wrap;
+  opacity:0; animation:fadeUp .8s 1.1s ease forwards;
+  position:relative; z-index:1;
+}
+
+.hero-desc {
+  max-width:400px; font-size:15px;
+  line-height:1.8; color:var(--ink-mid);
+  font-weight:300;
+}
+
+.hero-div-pills {
+  display:flex; flex-direction:column; gap:8px;
+  align-items:flex-end;
+}
+.hero-div-pill {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:8px 16px;
+  background:var(--white);
+  border:1px solid rgba(14,15,13,0.1);
+  border-radius:100px;
+  font-family:'DM Mono',monospace;
+  font-size:9px; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--ink-soft);
+  transition:border-color .25s, color .25s, transform .25s;
+  cursor:default;
+  white-space:nowrap;
+}
+.hero-div-pill:hover {
+  border-color:var(--pill-color);
+  color:var(--ink);
+  transform:translateX(-4px);
+}
+.pill-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--pill-color);
+  flex-shrink:0;
+}
+
+/* ── DIVIDER ─────── */
+.divider {
+  height:60px; overflow:hidden;
+  background:var(--ink);
+  display:flex; align-items:center;
+}
+.divider-track {
+  display:flex; animation:ticker 22s linear infinite;
+  white-space:nowrap;
+}
+.divider-item {
+  display:inline-flex; align-items:center; gap:20px;
+  padding:0 32px;
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+}
+.divider-gem { color:var(--gold); font-size:14px; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ── STATEMENT ────── */
+#statement {
+  padding:120px 48px;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center;
+  background:var(--white);
+}
+
+.stmt-left { }
+
+.stmt-label {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:24px;
+  display:flex; align-items:center; gap:10px;
+}
+.stmt-label::before { content:''; width:20px; height:1px; background:var(--gold); }
+
+.stmt-heading {
+  font-family:'Unbounded',sans-serif;
+  font-weight:700; font-size:clamp(28px,3.5vw,48px);
+  line-height:1.1; letter-spacing:-0.02em;
+  color:var(--ink);
+}
+.stmt-heading em { color:var(--gold); font-style:normal; }
+
+.stmt-body {
+  margin-top:24px; font-size:14px;
+  line-height:1.9; color:var(--ink-mid);
+  font-weight:300; max-width:460px;
+}
+
+.stmt-right {
+  display:flex; flex-direction:column; gap:1px;
+}
+
+.stmt-fact {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:20px 0;
+  border-bottom:1px solid rgba(14,15,13,0.07);
+}
+.stmt-fact:first-child { border-top:1px solid rgba(14,15,13,0.07); }
+.stmt-fact-label {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.stmt-fact-val {
+  font-family:'Unbounded',sans-serif;
+  font-weight:600; font-size:13px;
+  color:var(--ink); letter-spacing:-0.01em;
+}
+.stmt-fact-val.accent { color:var(--gold); }
+
+/* ── DIVISIONS ────── */
+#divisions {
+  background:var(--cream);
+  padding:0 0 0;
+}
+
+.div-header {
+  padding:48px 48px 32px;
+  display:flex; align-items:baseline; justify-content:space-between;
+}
+.div-header-title {
+  font-family:'Unbounded',sans-serif;
+  font-weight:700; font-size:11px;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--ink);
+}
+.div-header-note {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.1em; color:var(--ink-faint);
+}
+
+/* Division cards — 2x2 large blocks */
+.div-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+
+.div-card {
+  padding:56px 48px;
+  border:1px solid rgba(14,15,13,0.07);
+  position:relative; overflow:hidden;
+  min-height:380px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  transition:background .4s;
+  cursor:default;
+}
+.div-card::before {
+  content:'';
+  position:absolute; inset:0;
+  background:var(--card-color);
+  opacity:0;
+  transition:opacity .4s;
+}
+.div-card:hover::before { opacity:0.04; }
+
+.div-card-top { position:relative; z-index:1; }
+
+.div-card-num {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.14em; color:var(--ink-faint);
+  margin-bottom:28px;
+}
+
+.div-card-name {
+  font-family:'Unbounded',sans-serif;
+  font-weight:800;
+  font-size:clamp(28px, 3vw, 42px);
+  line-height:1.0; letter-spacing:-0.025em;
+  color:var(--ink);
+  transition:color .35s;
+  margin-bottom:4px;
+}
+.div-card:hover .div-card-name { color:var(--card-color); }
+
+.div-card-category {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--card-color);
+  margin-bottom:20px;
+}
+
+.div-card-desc {
+  font-size:13px; line-height:1.8;
+  color:var(--ink-mid); font-weight:300;
+  max-width:340px;
+}
+
+.div-card-bottom {
+  display:flex; align-items:center;
+  justify-content:space-between;
+  position:relative; z-index:1;
+  margin-top:32px;
+}
+
+.div-card-status {
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:'DM Mono',monospace; font-size:8px;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.status-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--card-color);
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.div-card-cta {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--card-color); text-decoration:none;
+  transition:gap .25s;
+}
+.div-card-cta:hover { gap:14px; }
+.cta-arrow {
+  width:24px; height:24px; border-radius:50%;
+  border:1px solid var(--card-color);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px;
+  transition:background .25s, color .25s, transform .25s;
+}
+.div-card-cta:hover .cta-arrow {
+  background:var(--card-color); color:var(--white);
+  transform:rotate(45deg);
+}
+
+/* Big number watermark */
+.div-card-watermark {
+  position:absolute; bottom:-20px; right:20px;
+  font-family:'Unbounded',sans-serif;
+  font-weight:900; font-size:160px;
+  line-height:1; letter-spacing:-0.05em;
+  color:var(--card-color);
+  opacity:0.04;
+  pointer-events:none;
+  transition:opacity .4s;
+  z-index:0;
+}
+.div-card:hover .div-card-watermark { opacity:0.08; }
+
+/* ── MANIFESTO ────── */
+#manifesto {
+  background:var(--ink);
+  padding:120px 48px;
+  position:relative; overflow:hidden;
+}
+
+#manifesto::before {
+  content:'';
+  position:absolute; top:-200px; left:50%;
+  transform:translateX(-50%);
+  width:800px; height:600px;
+  background:radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 65%);
+  pointer-events:none;
+}
+
+.manifesto-label {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:48px;
+  display:flex; align-items:center; gap:12px;
+  opacity:0.8;
+}
+.manifesto-label::before { content:''; width:20px; height:1px; background:var(--gold); }
+
+.manifesto-lines { display:flex; flex-direction:column; gap:0; }
+
+.manifesto-line {
+  font-family:'Unbounded',sans-serif;
+  font-weight:900;
+  font-size:clamp(40px, 6.5vw, 96px);
+  line-height:1.0;
+  letter-spacing:-0.03em;
+  padding:20px 0;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; justify-content:space-between;
+  color:rgba(245,241,234,0.15);
+  transition:color .4s;
+  cursor:default;
+}
+.manifesto-line:first-child { border-top:1px solid rgba(255,255,255,0.06); }
+.manifesto-line:hover { color:rgba(245,241,234,0.9); }
+.manifesto-line.gold { color:var(--gold); opacity:0.7; }
+.manifesto-line.gold:hover { color:var(--gold); opacity:1; }
+
+.manifesto-line-tag {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:rgba(245,241,234,0.2);
+  font-weight:300;
+  transition:color .4s;
+}
+.manifesto-line:hover .manifesto-line-tag { color:rgba(245,241,234,0.4); }
+
+/* ── PUBLICATION ──── */
+#publication {
+  background:var(--white);
+  padding:120px 48px;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center;
+}
+
+.pub-left {}
+
+.pub-label {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:24px;
+  display:flex; align-items:center; gap:10px;
+}
+.pub-label::before { content:''; width:20px; height:1px; background:var(--gold); }
+
+.pub-title {
+  font-family:'Unbounded',sans-serif;
+  font-weight:900;
+  font-size:clamp(44px, 6vw, 88px);
+  line-height:0.92; letter-spacing:-0.03em;
+  color:var(--ink);
+}
+.pub-title span { color:var(--gold); }
+
+.pub-desc {
+  margin-top:24px; font-size:14px;
+  line-height:1.9; color:var(--ink-mid);
+  font-weight:300; max-width:400px;
+}
+
+.pub-sub-label {
+  margin-top:40px;
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+
+.pub-right {
+  display:flex; flex-direction:column;
+  gap:0;
+  background:var(--cream);
+  border:1px solid rgba(14,15,13,0.07);
+  border-radius:16px;
+  overflow:hidden;
+  padding:8px;
+}
+
+.pub-card {
+  padding:20px 20px;
+  border-radius:10px;
+  transition:background .25s;
+  cursor:default;
+}
+.pub-card:hover { background:var(--white); }
+
+.pub-card-label {
+  font-family:'DM Mono',monospace; font-size:8px;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--ink-faint); margin-bottom:6px;
+}
+.pub-card-title {
+  font-size:13px; font-weight:400;
+  color:var(--ink); line-height:1.5;
+  transition:color .25s;
+}
+.pub-card:hover .pub-card-title { color:var(--gold); }
+
+/* ── CLOSE ──────── */
+#close {
+  background:var(--cream2);
+  padding:120px 48px;
+  position:relative; overflow:hidden;
+}
+
+.close-inner {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center;
+}
+
+.close-left {}
+
+.close-label {
+  font-family:'DM Mono',monospace; font-size:9px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:24px;
+  display:flex; align-items:center; gap:10px;
+}
+.close-label::before { content:''; width:20px; height:1px; background:var(--gold); }
+
+.close-heading {
+  font-family:'Unbounded',sans-serif;
+  font-weight:900;
+  font-size:clamp(40px, 5.5vw, 76px);
+  line-height:0.92; letter-spacing:-0.03em;
+  color:var(--ink);
+}
+.close-heading em { color:var(--gold); font-style:normal; }
+
+.close-body {
+  margin-top:24px; font-size:14px;
+  line-height:1.9; color:var(--ink-mid);
+  font-weight:300; max-width:400px;
+}
+
+.close-right {
+  display:flex; flex-direction:column; gap:12px;
+}
+
+.close-contact-card {
+  background:var(--white);
+  border:1px solid rgba(14,15,13,0.08);
+  border-radius:12px;
+  padding:20px 24px;
+  display:flex; align-items:center;
+  justify-content:space-between;
+  transition:border-color .25s, transform .25s;
+  cursor:default;
+}
+.close-contact-card:hover {
+  border-color:var(--gold);
+  transform:translateY(-2px);
+}
+.close-contact-label {
+  font-family:'DM Mono',monospace; font-size:8px;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin-bottom:5px;
+}
+.close-contact-val {
+  font-size:13px; color:var(--ink);
+  text-decoration:none; font-weight:400;
+  transition:color .25s;
+}
+.close-contact-card:hover .close-contact-val { color:var(--gold); }
+.close-contact-arrow {
+  font-size:16px; color:var(--ink-faint);
+  transition:color .25s, transform .25s;
+}
+.close-contact-card:hover .close-contact-arrow {
+  color:var(--gold); transform:translate(2px,-2px);
+}
+
+/* ── FOOTER ─────── */
+footer {
+  background:var(--ink);
+  padding:32px 48px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:16px;
+}
+.footer-logo {
+  font-family:'Unbounded',sans-serif;
+  font-weight:700; font-size:12px;
+  letter-spacing:0.04em; color:rgba(245,241,234,0.4);
+}
+.footer-logo-dot { color:var(--gold); }
+.footer-links { display:flex; gap:24px; flex-wrap:wrap; }
+.footer-link {
+  font-family:'DM Mono',monospace; font-size:8px;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:rgba(245,241,234,0.2);
+  text-decoration:none; transition:color .2s;
+}
+.footer-link:hover { color:var(--gold); }
+.footer-copy {
+  font-family:'DM Mono',monospace; font-size:8px;
+  color:rgba(245,241,234,0.15);
+}
+
+/* ── REVEAL ──────── */
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition:opacity .9s cubic-bezier(.16,1,.3,1),
+              transform .9s cubic-bezier(.16,1,.3,1);
+}
+.reveal.in { opacity:1; transform:translateY(0); }
+.rd1{transition-delay:.08s} .rd2{transition-delay:.16s}
+.rd3{transition-delay:.24s} .rd4{transition-delay:.32s}
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── MOBILE ─────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Hide custom cursor on touch */
+  .cur-dot, .cur-ring { display:none; }
+  body { cursor:auto; }
+
+  /* Nav */
+  nav {
+    padding:0 20px;
+    height:52px;
+  }
+  .nav-links {
+    gap:16px;
+  }
+  .nav-link { display:none; }
+  .nav-cta {
+    font-size:9px;
+    padding:8px 14px;
+  }
+
+  /* Hero */
+  #hero {
+    padding:80px 20px 48px;
+    min-height:100svh;
+  }
+  .hero-eyebrow { margin-bottom:28px; }
+  .hero-title { margin-bottom:36px; }
+  .hero-bottom {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:28px;
+  }
+  .hero-desc { font-size:14px; max-width:100%; }
+  .hero-div-pills { align-items:flex-start; width:100%; }
+  .hero-div-pill { font-size:8px; }
+
+  /* Divider ticker */
+  .divider-item { font-size:8px; padding:0 20px; gap:12px; }
+
+  /* Statement */
+  #statement {
+    grid-template-columns:1fr;
+    gap:40px;
+    padding:72px 20px;
+  }
+  .stmt-heading { font-size:clamp(24px,7vw,36px); }
+
+  /* Divisions */
+  .div-header { padding:36px 20px 24px; }
+  .div-grid { grid-template-columns:1fr; }
+  .div-card {
+    padding:36px 24px;
+    min-height:auto;
+  }
+  .div-card-name { font-size:clamp(28px,8vw,40px); }
+  .div-card-watermark { font-size:100px; bottom:-10px; right:10px; }
+
+  /* Manifesto */
+  #manifesto { padding:72px 20px; }
+  .manifesto-line {
+    font-size:clamp(22px,6.5vw,40px);
+    padding:14px 0;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+  }
+  .manifesto-line-tag { font-size:8px; }
+
+  /* Publication */
+  #publication {
+    grid-template-columns:1fr;
+    gap:40px;
+    padding:72px 20px;
+  }
+  .pub-title { font-size:clamp(48px,13vw,72px); }
+
+  /* Close */
+  #close { padding:72px 20px; }
+  .close-inner {
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+  .close-heading { font-size:clamp(40px,11vw,64px); }
+  .close-contact-card { padding:16px 18px; }
+  .close-contact-val { font-size:11px; }
+
+  /* Footer */
+  footer {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+    padding:28px 20px;
+  }
+  .footer-links {
+    gap:16px;
+  }
+}
+
+/* ── SMALL MOBILE ────────────────────────────── */
+@media (max-width: 390px) {
+  .hero-title { letter-spacing:-0.04em; }
+  .hero-div-pill { font-size:7px; padding:6px 12px; }
+  .manifesto-line { font-size:clamp(20px,6vw,28px); }
+  .stmt-heading { font-size:clamp(22px,6.5vw,30px); }
+  .close-heading { font-size:clamp(36px,10vw,52px); }
+}
+
+/* ── TABLET ──────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  nav { padding:0 32px; }
+  #hero { padding:90px 32px 52px; }
+  .hero-bottom { gap:32px; }
+  #statement { padding:80px 32px; gap:48px; }
+  .div-header { padding:36px 32px 24px; }
+  .div-card { padding:40px 32px; }
+  #manifesto { padding:80px 32px; }
+  .manifesto-line { font-size:clamp(28px,4.5vw,56px); }
+  #publication { padding:80px 32px; gap:48px; }
+  #close { padding:80px 32px; }
+  .close-inner { gap:48px; }
+  footer { padding:28px 32px; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ARM<span class="nav-logo-dot">.</span>Digital Publishing</a>
+  <div class="nav-links">
+    <a href="#divisions" class="nav-link">Divisions</a>
+    <a href="#publication" class="nav-link">Publication</a>
+    <a href="#close" class="nav-link">Contact</a>
+    <a href="#close" class="nav-cta">Enquire</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-texture">
+    <svg viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="1" fill="rgba(14,15,13,0.12)"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#dots)"/>
+    </svg>
+  </div>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="hero-eyebrow">
+    <span class="eyebrow-line"></span>
+    A Digital Publishing Company
+  </div>
+
+  <h1 class="hero-title">
+    <span class="hero-title-row r1"><span class="hero-title-inner">BUILDING</span></span>
+    <span class="hero-title-row r2"><span class="hero-title-inner hero-title-stroke">WHAT</span></span>
+    <span class="hero-title-row r3"><span class="hero-title-inner"><span class="hero-title-gold">COMES NEXT.</span></span></span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      ARM Digital Publishing operates four divisions and one flagship publication — each positioned at the frontier of digital enterprise. Technology, creativity, governance, and human narrative.
+    </p>
+    <div class="hero-div-pills">
+      <div class="hero-div-pill" style="--pill-color:#C9A84C;">
+        <div class="pill-dot"></div>Advisory & Works
+      </div>
+      <div class="hero-div-pill" style="--pill-color:#00857A;">
+        <div class="pill-dot"></div>Digital Products & Services
+      </div>
+      <div class="hero-div-pill" style="--pill-color:#5C3D8F;">
+        <div class="pill-dot"></div>AI Governance
+      </div>
+      <div class="hero-div-pill" style="--pill-color:#B84E2A;">
+        <div class="pill-dot"></div>Digital Estates
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER TICKER -->
+<div class="divider">
+  <div class="divider-track">
+    <span class="divider-item">ARM Digital Publishing<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Building What Comes Next<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Four Divisions<span class="divider-gem">◆</span></span>
+    <span class="divider-item">One Publication<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Technology & Human Narrative<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Built to Compound<span class="divider-gem">◆</span></span>
+    <span class="divider-item">First Mover Infrastructure<span class="divider-gem">◆</span></span>
+    <span class="divider-item">ARM Digital Publishing<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Building What Comes Next<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Four Divisions<span class="divider-gem">◆</span></span>
+    <span class="divider-item">One Publication<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Technology & Human Narrative<span class="divider-gem">◆</span></span>
+    <span class="divider-item">Built to Compound<span class="divider-gem">◆</span></span>
+    <span class="divider-item">First Mover Infrastructure<span class="divider-gem">◆</span></span>
+  </div>
+</div>
+
+<!-- STATEMENT -->
+<section id="statement">
+  <div class="stmt-left reveal">
+    <div class="stmt-label">The Company</div>
+    <h2 class="stmt-heading">Not one business.<br>An <em>operating<br>architecture.</em></h2>
+    <p class="stmt-body">Four divisions, one publication, and a unified vision for what digital enterprise looks like when built to last. Each position is defensible. Each designed to compound. Each permanent.</p>
+  </div>
+  <div class="stmt-right reveal rd2">
+    <div class="stmt-fact">
+      <span class="stmt-fact-label">Entity</span>
+      <span class="stmt-fact-val">ARM Digital Publishing</span>
+    </div>
+    <div class="stmt-fact">
+      <span class="stmt-fact-label">Structure</span>
+      <span class="stmt-fact-val">Multi-Division LLC</span>
+    </div>
+    <div class="stmt-fact">
+      <span class="stmt-fact-label">Active Divisions</span>
+      <span class="stmt-fact-val accent">Four</span>
+    </div>
+    <div class="stmt-fact">
+      <span class="stmt-fact-label">Flagship Publication</span>
+      <span class="stmt-fact-val accent">Current Future</span>
+    </div>
+    <div class="stmt-fact">
+      <span class="stmt-fact-label">Operating Model</span>
+      <span class="stmt-fact-val">First-Mover / Compound</span>
+    </div>
+    <div class="stmt-fact">
+      <span class="stmt-fact-label">Status</span>
+      <span class="stmt-fact-val accent">Operational</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISIONS -->
+<section id="divisions">
+  <div class="div-header reveal">
+    <span class="div-header-title">Our Divisions</span>
+    <span class="div-header-note">Four operating units — click to explore</span>
+  </div>
+
+  <div class="div-grid">
+
+    <div class="div-card reveal" style="--card-color:#C9A84C;">
+      <div class="div-card-watermark">01</div>
+      <div class="div-card-top">
+        <div class="div-card-num">Division 01 / 04</div>
+        <div class="div-card-name">Advisory<br>& Works</div>
+        <div class="div-card-category">Consulting & AI Integration</div>
+        <div class="div-card-desc">We work with founders who have proven their model and are ready to redesign the structure they built it on. Transitioning from operator to owner — completely.</div>
+      </div>
+      <div class="div-card-bottom">
+        <div class="div-card-status"><div class="status-dot"></div>Active</div>
+        <a href="#" class="div-card-cta">Explore <div class="cta-arrow">↗</div></a>
+      </div>
+    </div>
+
+    <div class="div-card reveal rd1" style="--card-color:#00857A;">
+      <div class="div-card-watermark">02</div>
+      <div class="div-card-top">
+        <div class="div-card-num">Division 02 / 04</div>
+        <div class="div-card-name">Digital<br>Products</div>
+        <div class="div-card-category">Digital Tools & Services</div>
+        <div class="div-card-desc">Creates and publishes digital tools and services at scale — built for broad professional audiences, generating value independently of the founder's direct time.</div>
+      </div>
+      <div class="div-card-bottom">
+        <div class="div-card-status"><div class="status-dot"></div>Pre-launch</div>
+        <a href="#" class="div-card-cta">Explore <div class="cta-arrow">↗</div></a>
+      </div>
+    </div>
+
+    <div class="div-card reveal rd2" style="--card-color:#5C3D8F;">
+      <div class="div-card-watermark">03</div>
+      <div class="div-card-top">
+        <div class="div-card-num">Division 03 / 04</div>
+        <div class="div-card-name">AI<br>Governance</div>
+        <div class="div-card-category">Certification & Compliance</div>
+        <div class="div-card-desc">The verified human oversight layer for AI in high-stakes environments. Producing the documented proof of human accountability that the law now requires and the market demands.</div>
+      </div>
+      <div class="div-card-bottom">
+        <div class="div-card-status"><div class="status-dot"></div>Pre-launch</div>
+        <a href="#" class="div-card-cta">Explore <div class="cta-arrow">↗</div></a>
+      </div>
+    </div>
+
+    <div class="div-card reveal rd3" style="--card-color:#B84E2A;">
+      <div class="div-card-watermark">04</div>
+      <div class="div-card-top">
+        <div class="div-card-num">Division 04 / 04</div>
+        <div class="div-card-name">Digital<br>Estates</div>
+        <div class="div-card-category">Territory Acquisition</div>
+        <div class="div-card-desc">Identifies underserved markets where digital infrastructure does not yet exist, claims that territory, and builds platforms that become the definitive destination — arriving first, every time.</div>
+      </div>
+      <div class="div-card-bottom">
+        <div class="div-card-status"><div class="status-dot"></div>Pre-launch</div>
+        <a href="#" class="div-card-cta">Explore <div class="cta-arrow">↗</div></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-label reveal">What we believe</div>
+  <div class="manifesto-lines reveal rd1">
+    <div class="manifesto-line">
+      <span>THE FUTURE IS ALREADY BUILT.</span>
+      <span class="manifesto-line-tag">Principle 01</span>
+    </div>
+    <div class="manifesto-line">
+      <span>FIRST MOVERS OWN THE TERRITORY.</span>
+      <span class="manifesto-line-tag">Principle 02</span>
+    </div>
+    <div class="manifesto-line gold">
+      <span>HUMANS STAY IN THE LOOP.</span>
+      <span class="manifesto-line-tag">Principle 03</span>
+    </div>
+    <div class="manifesto-line">
+      <span>KNOWLEDGE IS THE MOAT.</span>
+      <span class="manifesto-line-tag">Principle 04</span>
+    </div>
+    <div class="manifesto-line">
+      <span>BUILD TO COMPOUND.</span>
+      <span class="manifesto-line-tag">Principle 05</span>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATION -->
+<section id="publication">
+  <div class="pub-left reveal">
+    <div class="pub-label">Flagship Publication</div>
+    <h2 class="pub-title">CURRENT<br><span>FUTURE</span></h2>
+    <p class="pub-desc">ARM's authoritative editorial voice — written for future leaders and emerging professionals navigating the transition to the new digital economy.</p>
+    <div class="pub-sub-label">Newsletter · YouTube · In Production</div>
+  </div>
+  <div class="pub-right reveal rd2">
+    <div class="pub-card">
+      <div class="pub-card-label">In production</div>
+      <div class="pub-card-title">Why Your Business Still Measures the Wrong Thing</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-card-label">In development</div>
+      <div class="pub-card-title">The New Job Title Worth $300/Hour That Doesn't Have a Name Yet</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-card-label">Series</div>
+      <div class="pub-card-title">The Five Levels — From Execution to Sovereignty</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-card-label">Forthcoming</div>
+      <div class="pub-card-title">Humans in the Loop — AI Governance for the Clinical World</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section id="close">
+  <div class="close-inner">
+    <div class="close-left reveal">
+      <div class="close-label">Get in touch</div>
+      <h2 class="close-heading">WORK<br>WITH<br><em>ARM.</em></h2>
+      <p class="close-body">For partnership enquiries, investment conversations, advisory engagements, or media requests. ARM was already operating. Now you know it exists.</p>
+    </div>
+    <div class="close-right reveal rd2">
+      <div class="close-contact-card">
+        <div>
+          <div class="close-contact-label">Partnership Enquiries</div>
+          <a href="mailto:hello@armdigitalpublishing.com" class="close-contact-val">hello@armdigitalpublishing.com</a>
+        </div>
+        <span class="close-contact-arrow">↗</span>
+      </div>
+      <div class="close-contact-card">
+        <div>
+          <div class="close-contact-label">Advisory Enquiries</div>
+          <a href="mailto:advisory@armdigitalpublishing.com" class="close-contact-val">advisory@armdigitalpublishing.com</a>
+        </div>
+        <span class="close-contact-arrow">↗</span>
+      </div>
+      <div class="close-contact-card">
+        <div>
+          <div class="close-contact-label">Press & Media</div>
+          <a href="mailto:press@armdigitalpublishing.com" class="close-contact-val">press@armdigitalpublishing.com</a>
+        </div>
+        <span class="close-contact-arrow">↗</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">ARM<span class="footer-logo-dot">.</span>Digital Publishing</span>
+  <div class="footer-links">
+    <a href="#" class="footer-link">Advisory & Works</a>
+    <a href="#" class="footer-link">Digital Products</a>
+    <a href="#" class="footer-link">AI Governance</a>
+    <a href="#" class="footer-link">Digital Estates</a>
+    <a href="#" class="footer-link">Current Future</a>
+  </div>
+  <span class="footer-copy">© 2025 ARM Digital Publishing. All rights reserved.</span>
+</footer>
+
+<script>
+const dot = document.getElementById('curDot');
+const ring = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+const isTouch = window.matchMedia('(hover:none)').matches;
+if(!isTouch){
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+  });
+  (function animR(){
+    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animR);
+  })();
+  document.querySelectorAll('a,.div-card,.close-contact-card,.manifesto-line').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{
+      dot.style.width='12px'; dot.style.height='12px';
+      ring.style.width='48px'; ring.style.height='48px';
+      ring.style.borderColor='rgba(201,168,76,0.5)';
+    });
+    el.addEventListener('mouseleave',()=>{
+      dot.style.width='8px'; dot.style.height='8px';
+      ring.style.width='34px'; ring.style.height='34px';
+      ring.style.borderColor='rgba(14,15,13,0.25)';
+    });
+  });
+}
+
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
