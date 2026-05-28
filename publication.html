@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Current Future — ARM Digital Publishing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F1EA;
+  --cream2: #EDE8DE;
+  --white: #FFFFFF;
+  --ink: #0E0F0D;
+  --ink-mid: #3D3D38;
+  --ink-soft: #888880;
+  --ink-faint: #C2BFB6;
+  --gold: #C9A84C;
+  --gold-pale: rgba(201,168,76,0.08);
+  --teal: #00857A;
+  --violet: #5C3D8F;
+  --coral: #B84E2A;
+  --black: #080B0A;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+.cur-dot{position:fixed;width:8px;height:8px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+.cur-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(14,15,13,0.2);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s cubic-bezier(.16,1,.3,1),height .2s cubic-bezier(.16,1,.3,1);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(245,241,234,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(14,15,13,0.08);}
+.nav-back{display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.nav-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;color:var(--ink);text-decoration:none;}
+.nav-logo-dot{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:24px;}
+.nav-link{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-link:hover{color:var(--ink);}
+.nav-subscribe{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);background:var(--ink);padding:9px 18px;text-decoration:none;border-radius:2px;transition:background .2s;}
+.nav-subscribe:hover{background:var(--ink-mid);}
+
+/* MASTHEAD */
+#masthead{padding:100px 48px 60px;border-bottom:1px solid rgba(14,15,13,0.1);background:var(--white);}
+.masthead-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+.masthead-left{}
+.masthead-pub-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;opacity:0;animation:fadeUp .6s .3s ease forwards;}
+.masthead-pub-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+.masthead-title{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(56px,9vw,132px);line-height:0.88;letter-spacing:-0.03em;color:var(--ink);opacity:0;animation:fadeUp .8s .4s ease forwards;}
+.masthead-title span{color:var(--gold);}
+.masthead-right{max-width:360px;opacity:0;animation:fadeUp .8s .6s ease forwards;}
+.masthead-desc{font-size:14px;line-height:1.85;color:var(--ink-mid);font-weight:300;margin-bottom:20px;}
+.masthead-meta{display:flex;gap:20px;flex-wrap:wrap;}
+.masthead-meta-item{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-faint);}
+.masthead-meta-item span{color:var(--ink-soft);}
+
+/* FILTER BAR */
+.filter-bar{padding:16px 48px;border-bottom:1px solid rgba(14,15,13,0.08);background:var(--white);display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:56px;z-index:100;backdrop-filter:blur(16px);}
+.filter-btn{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:6px 14px;border:1px solid rgba(14,15,13,0.12);border-radius:100px;background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:var(--ink);color:var(--ink);}
+.filter-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+/* FEATURED */
+#featured{padding:64px 48px;background:var(--white);border-bottom:1px solid rgba(14,15,13,0.08);}
+.featured-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;gap:10px;}
+.featured-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+
+.featured-card{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid rgba(14,15,13,0.1);border-radius:16px;overflow:hidden;transition:transform .35s,box-shadow .35s;cursor:pointer;}
+.featured-card:hover{transform:translateY(-4px);box-shadow:0 24px 64px rgba(14,15,13,0.08);}
+.featured-card-visual{background:var(--black);padding:64px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;min-height:400px;}
+.featured-card-visual::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:rgba(201,168,76,0.08);pointer-events:none;}
+.featured-bg-word{position:absolute;bottom:-20px;left:-10px;font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(80px,12vw,160px);color:rgba(255,255,255,0.03);line-height:1;letter-spacing:-0.04em;pointer-events:none;}
+.featured-card-num{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(255,255,255,0.2);}
+.featured-card-title-vis{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(24px,3vw,40px);line-height:1.05;letter-spacing:-0.025em;color:var(--white);position:relative;z-index:1;}
+.featured-card-title-vis em{color:var(--gold);font-style:normal;}
+.featured-card-content{padding:48px;display:flex;flex-direction:column;justify-content:space-between;background:var(--cream);}
+.featured-card-tag{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.featured-card-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.featured-card-desc{font-family:'Instrument Serif',serif;font-size:clamp(17px,2vw,22px);line-height:1.55;color:var(--ink);font-style:italic;margin-bottom:24px;}
+.featured-card-meta{display:flex;align-items:center;justify-content:space-between;}
+.featured-card-meta-left{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);}
+.featured-read-link{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;transition:gap .25s;}
+.featured-read-link:hover{gap:14px;}
+.read-arrow{width:20px;height:20px;border-radius:50%;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px;transition:background .25s,color .25s;}
+.featured-read-link:hover .read-arrow{background:var(--ink);color:var(--white);}
+
+/* ARTICLE GRID */
+#articles{padding:64px 48px;background:var(--cream);}
+.articles-heading{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid rgba(14,15,13,0.08);}
+.articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+
+.article-card{background:var(--white);border:1px solid rgba(14,15,13,0.08);border-radius:12px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;cursor:pointer;}
+.article-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(14,15,13,0.07);border-color:rgba(14,15,13,0.15);}
+.article-card-header{padding:28px 28px 0;min-height:140px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;}
+.article-card-bg{position:absolute;inset:0;opacity:0.04;transition:opacity .3s;}
+.article-card:hover .article-card-bg{opacity:0.07;}
+.article-card-cat{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--card-color);margin-bottom:12px;position:relative;z-index:1;}
+.article-card-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;line-height:1.25;letter-spacing:-0.015em;color:var(--ink);position:relative;z-index:1;transition:color .25s;}
+.article-card:hover .article-card-title{color:var(--card-color);}
+.article-card-body{padding:16px 28px 28px;}
+.article-card-desc{font-size:12px;line-height:1.75;color:var(--ink-soft);margin-bottom:20px;font-weight:300;}
+.article-card-footer{display:flex;align-items:center;justify-content:space-between;}
+.article-card-meta{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);}
+.article-status{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:var(--status-bg);color:var(--status-color);}
+
+/* COMING SOON STRIP */
+.coming-strip{padding:40px 48px;background:var(--black);display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+.coming-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,241,234,0.3);}
+.coming-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;color:rgba(245,241,234,0.6);}
+.coming-title em{color:var(--gold);font-style:normal;}
+
+/* SUBSCRIBE */
+#subscribe{padding:100px 48px;background:var(--gold);position:relative;overflow:hidden;text-align:center;}
+#subscribe::before{content:'CF';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(160px,28vw,360px);color:rgba(0,0,0,0.04);letter-spacing:-0.06em;pointer-events:none;line-height:1;}
+.sub-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(14,15,13,0.45);margin-bottom:20px;}
+.sub-heading{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(32px,5vw,68px);line-height:0.95;letter-spacing:-0.03em;color:var(--black);margin-bottom:20px;position:relative;z-index:1;}
+.sub-body{font-size:15px;line-height:1.8;color:rgba(14,15,13,0.6);max-width:400px;margin:0 auto 36px;font-weight:300;}
+.sub-form{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+.sub-input{font-family:'DM Sans',sans-serif;font-size:13px;padding:12px 20px;border:1px solid rgba(14,15,13,0.2);border-radius:2px;background:var(--white);color:var(--ink);width:280px;outline:none;transition:border-color .2s;}
+.sub-input:focus{border-color:var(--ink);}
+.sub-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--white);background:var(--black);padding:12px 24px;border:none;border-radius:2px;cursor:pointer;transition:background .2s;}
+.sub-btn:hover{background:var(--ink-mid);}
+
+footer{background:var(--black);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;color:rgba(245,241,234,0.3);}
+.footer-logo-dot{color:var(--gold);}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-link{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,241,234,0.2);text-decoration:none;transition:color .2s;}
+.footer-link:hover{color:var(--gold);}
+.footer-copy{font-family:'DM Mono',monospace;font-size:8px;color:rgba(245,241,234,0.12);}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  .cur-dot,.cur-ring{display:none;}body{cursor:auto;}
+  nav{padding:0 20px;}.nav-link{display:none;}
+  #masthead{padding:80px 20px 40px;}
+  .masthead-inner{flex-direction:column;gap:24px;}
+  .filter-bar{padding:12px 20px;}
+  #featured{padding:40px 20px;}
+  .featured-card{grid-template-columns:1fr;}
+  .featured-card-visual{min-height:280px;padding:40px 28px;}
+  .featured-card-content{padding:32px 28px;}
+  #articles{padding:40px 20px;}
+  .articles-grid{grid-template-columns:1fr;}
+  .coming-strip{padding:28px 20px;}
+  #subscribe{padding:72px 20px;}
+  .sub-input{width:100%;}
+  footer{flex-direction:column;align-items:flex-start;padding:28px 20px;}
+}
+@media(min-width:769px)and(max-width:1024px){
+  nav{padding:0 32px;}
+  #masthead,#featured,#articles{padding-left:32px;padding-right:32px;}
+  .articles-grid{grid-template-columns:1fr 1fr;}
+  .filter-bar{padding:16px 32px;}
+  footer{padding:28px 32px;}
+}
+</style>
+</head>
+<body>
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-back">← ARM Digital Publishing</a>
+  <a href="index.html" class="nav-logo">ARM<span class="nav-logo-dot">.</span>DP</a>
+  <div class="nav-right">
+    <a href="#subscribe" class="nav-link">Subscribe</a>
+    <a href="#subscribe" class="nav-subscribe">Subscribe Free</a>
+  </div>
+</nav>
+
+<section id="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-left">
+      <div class="masthead-pub-label">ARM Digital Publishing — Flagship Publication</div>
+      <h1 class="masthead-title">CURRENT<br><span>FUTURE</span></h1>
+    </div>
+    <div class="masthead-right">
+      <p class="masthead-desc">Written for future leaders and emerging professionals navigating the transition to the new digital economy. Technology, creativity, governance, and human narrative.</p>
+      <div class="masthead-meta">
+        <div class="masthead-meta-item">Format <span>Newsletter + YouTube</span></div>
+        <div class="masthead-meta-item">Audience <span>Future Leaders</span></div>
+        <div class="masthead-meta-item">Status <span>In Production</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterArticles('all')">All</button>
+  <button class="filter-btn" onclick="filterArticles('advisory')">Advisory</button>
+  <button class="filter-btn" onclick="filterArticles('products')">Digital Products</button>
+  <button class="filter-btn" onclick="filterArticles('governance')">AI Governance</button>
+  <button class="filter-btn" onclick="filterArticles('estates')">Digital Estates</button>
+  <button class="filter-btn" onclick="filterArticles('editorial')">Editorial</button>
+</div>
+
+<section id="featured">
+  <div class="featured-label reveal">Featured</div>
+  <a href="/publication/why-your-business-still-measures-the-wrong-thing" class="featured-card reveal rd1" style="text-decoration:none;">
+    <div class="featured-card-visual">
+      <div class="featured-bg-word">MEASURE</div>
+      <div class="featured-card-num">CF — 001</div>
+      <div class="featured-card-title-vis">WHY YOUR BUSINESS<br>STILL MEASURES<br>THE <em>WRONG THING.</em></div>
+    </div>
+    <div class="featured-card-content">
+      <div>
+        <div class="featured-card-tag"><div class="featured-card-tag-dot"></div>Advisory — Editorial</div>
+        <p class="featured-card-desc">"The management infrastructure we built to run companies is descended from a framework designed for people shovelling iron. AI breaks the logic that made time-based measurement useful."</p>
+      </div>
+      <div class="featured-card-meta">
+        <div class="featured-card-meta-left">8 min read · In production</div>
+        <div class="featured-read-link">Read <div class="read-arrow">→</div></div>
+      </div>
+    </div>
+  </a>
+</section>
+
+<section id="articles">
+  <div class="articles-heading reveal">All Articles</div>
+  <div class="articles-grid">
+
+    <a href="/publication/why-your-business-still-measures-the-wrong-thing" class="article-card" style="--card-color:#C9A84C; text-decoration:none;" data-cat="advisory">
+      <div class="article-card-header">
+        <div class="article-card-bg" style="background:#C9A84C;"></div>
+        <div class="article-card-cat">Advisory & Works</div>
+        <div class="article-card-title">Why Your Business Still Measures the Wrong Thing</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-card-desc">Taylor's scientific management was built for pig iron. We're still using it to measure knowledge work. AI breaks the logic entirely.</div>
+        <div class="article-card-footer">
+          <div class="article-card-meta">8 min read</div>
+          <div class="article-status" style="--status-bg:rgba(201,168,76,0.1);--status-color:#8A6E2A;">Live</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="article-card" style="--card-color:#C9A84C;" data-cat="advisory">
+      <div class="article-card-header">
+        <div class="article-card-bg" style="background:#C9A84C;"></div>
+        <div class="article-card-cat">Advisory & Works</div>
+        <div class="article-card-title">The New Job Title Worth $300/Hour That Doesn't Have a Name Yet</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-card-desc">A new professional category is emerging — as significant as the web developer in 2002 — and most people don't know what to call it yet.</div>
+        <div class="article-card-footer">
+          <div class="article-card-meta">6 min read</div>
+          <div class="article-status" style="--status-bg:rgba(14,15,13,0.06);--status-color:#888880;">In development</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-card" style="--card-color:#C9A84C;" data-cat="advisory">
+      <div class="article-card-header">
+        <div class="article-card-bg" style="background:#C9A84C;"></div>
+        <div class="article-card-cat">Advisory & Works</div>
+        <div class="article-card-title">The Five Levels — From Execution to Sovereignty</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-card-desc">The Ascent Model mapped. Five levels that every operator moves through — whether they know it or not. Where are you on the ascent?</div>
+        <div class="article-card-footer">
+          <div class="article-card-meta">Series · 5 parts</div>
+          <div class="article-status" style="--status-bg:rgba(14,15,13,0.06);--status-color:#888880;">Forthcoming</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-card" style="--card-color:#5C3D8F;" data-cat="governance">
+      <div class="article-card-header">
+        <div class="article-card-bg" style="background:#5C3D8F;"></div>
+        <div class="article-card-cat">AI Governance</div>
+        <div class="article-card-title">Humans in the Loop — AI Governance for the Clinical World</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-card-desc">AI is moving faster than the governance frameworks designed to contain it. In clinical settings, this creates a specific and compounding risk.</div>
+        <div class="article-card-footer">
+          <div class="article-card-meta">7 min read</div>
+          <div class="article-status" style="--status-bg:rgba(92,61,143,0.08);--status-color:#5C3D8F;">Forthcoming</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-card" style="--card-color:#00857A;" data-cat="products">
+      <div class="article-card-header">
+        <div class="article-card-bg" style="background:#00857A;"></div>
+        <div class="article-card-cat">Digital Products</div>
+        <div class="article-card-title">Seal the Moment — Document Integrity in the Age of AI</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-card-desc">When AI can generate anything, the ability to prove something existed — in its exact form, at a specific moment — becomes infrastructure.</div>
+        <div class="article-card-footer">
+          <div class="article-card-meta">5 min read</div>
+          <div class="article-status" style="--status-bg:rgba(0,133,122,0.08);--status-color:#00857A;">Forthcoming</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-card" style="--card-color:#B84E2A;" data-cat="estates">
+      <div class="article-card-header">
+        <div class="article-card-bg" style="background:#B84E2A;"></div>
+        <div class="article-card-cat">Digital Estates</div>
+        <div class="article-card-title">Arrive Before the Algorithms Do</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-card-desc">There are markets worldwide where credible digital infrastructure simply does not exist. The question is whether you're the one who builds it first.</div>
+        <div class="article-card-footer">
+          <div class="article-card-meta">6 min read</div>
+          <div class="article-status" style="--status-bg:rgba(184,78,42,0.08);--status-color:#B84E2A;">Forthcoming</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="subscribe">
+  <div class="sub-label reveal">Join the publication</div>
+  <h2 class="sub-heading reveal rd1">The future is being<br>built right now.</h2>
+  <p class="sub-body reveal rd2">Current Future covers the ideas, frameworks, and professional shifts that matter — before they become obvious. Free to subscribe.</p>
+  <div class="sub-form reveal rd3">
+    <input type="email" class="sub-input" placeholder="Your email address">
+    <button class="sub-btn">Subscribe Free</button>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">ARM<span class="footer-logo-dot">.</span>Digital Publishing</span>
+  <div class="footer-links">
+    <a href="index.html" class="footer-link">Home</a>
+    <a href="advisory.html" class="footer-link">Advisory & Works</a>
+    <a href="products.html" class="footer-link">Digital Products</a>
+    <a href="governance.html" class="footer-link">AI Governance</a>
+    <a href="estates.html" class="footer-link">Digital Estates</a>
+  </div>
+  <span class="footer-copy">© 2025 ARM Digital Publishing.</span>
+</footer>
+
+<script>
+const dot=document.getElementById('curDot'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+const isTouch=window.matchMedia('(hover:none)').matches;
+if(!isTouch){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function a(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+  document.querySelectorAll('a,.article-card,.featured-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{dot.style.width='12px';dot.style.height='12px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(201,168,76,0.5)';});
+    el.addEventListener('mouseleave',()=>{dot.style.width='8px';dot.style.height='8px';ring.style.width='34px';ring.style.height='34px';ring.style.borderColor='rgba(14,15,13,0.2)';});
+  });
+}
+
+function filterArticles(cat){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.article-card').forEach(card=>{
+    if(cat==='all'||card.dataset.cat===cat){
+      card.style.display='block';
+    } else {
+      card.style.display='none';
+    }
+  });
+}
+
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

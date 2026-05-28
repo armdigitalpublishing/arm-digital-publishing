@@ -467,74 +467,43 @@ nav {
 .manifesto-line:hover .manifesto-line-tag { color:rgba(245,241,234,0.4); }
 
 /* ── PUBLICATION ──── */
-#publication {
-  background:var(--white);
-  padding:120px 48px;
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:80px; align-items:center;
-}
+#publication { background:var(--white); padding:120px 48px; position:relative; z-index:1; }
 
-.pub-left {}
-
-.pub-label {
-  font-family:'DM Mono',monospace; font-size:9px;
-  letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--gold); margin-bottom:24px;
-  display:flex; align-items:center; gap:10px;
-}
+.pub-top { display:flex; align-items:flex-end; justify-content:space-between; gap:40px; margin-bottom:48px; flex-wrap:wrap; }
+.pub-top-left {}
+.pub-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
 .pub-label::before { content:''; width:20px; height:1px; background:var(--gold); }
-
-.pub-title {
-  font-family:'Unbounded',sans-serif;
-  font-weight:900;
-  font-size:clamp(44px, 6vw, 88px);
-  line-height:0.92; letter-spacing:-0.03em;
-  color:var(--ink);
-}
+.pub-title { font-family:'Unbounded',sans-serif; font-weight:900; font-size:clamp(44px,6vw,88px); line-height:0.92; letter-spacing:-0.03em; color:var(--ink); }
 .pub-title span { color:var(--gold); }
+.pub-desc { margin-top:16px; font-size:14px; line-height:1.8; color:var(--ink-mid); font-weight:300; max-width:400px; }
+.pub-see-all { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none; display:flex; align-items:center; gap:8px; white-space:nowrap; transition:color .2s, gap .2s; }
+.pub-see-all:hover { color:var(--gold); gap:14px; }
+.pub-see-arrow { font-size:13px; }
 
-.pub-desc {
-  margin-top:24px; font-size:14px;
-  line-height:1.9; color:var(--ink-mid);
-  font-weight:300; max-width:400px;
-}
+.pub-featured { margin-bottom:20px; }
+.pub-feat-card { display:grid; grid-template-columns:1fr 1fr; border:1px solid rgba(14,15,13,0.1); border-radius:16px; overflow:hidden; text-decoration:none; transition:transform .35s, box-shadow .35s; cursor:pointer; }
+.pub-feat-card:hover { transform:translateY(-4px); box-shadow:0 24px 64px rgba(14,15,13,0.08); }
+.pub-feat-visual { background:var(--black); padding:52px 44px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; min-height:320px; }
+.pub-feat-bg-word { position:absolute; bottom:-16px; left:-8px; font-family:'Unbounded',sans-serif; font-weight:900; font-size:clamp(70px,10vw,140px); color:rgba(255,255,255,0.03); line-height:1; letter-spacing:-0.04em; pointer-events:none; }
+.pub-feat-num { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; color:rgba(255,255,255,0.2); }
+.pub-feat-title { font-family:'Unbounded',sans-serif; font-weight:900; font-size:clamp(20px,2.4vw,32px); line-height:1.05; letter-spacing:-0.02em; color:var(--white); position:relative; z-index:1; }
+.pub-feat-title em { color:var(--gold); font-style:normal; }
+.pub-feat-content { padding:44px; background:var(--cream); display:flex; flex-direction:column; justify-content:space-between; }
+.pub-feat-cat { display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+.pub-feat-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); }
+.pub-feat-desc { font-size:13px; line-height:1.8; color:var(--ink-mid); font-weight:300; font-style:italic; margin-bottom:24px; }
+.pub-feat-meta { display:flex; align-items:center; justify-content:space-between; }
+.pub-feat-time { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); }
+.pub-feat-live { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:#5A7A2A; background:rgba(90,122,42,0.1); padding:4px 10px; border-radius:100px; }
 
-.pub-sub-label {
-  margin-top:40px;
-  font-family:'DM Mono',monospace; font-size:9px;
-  letter-spacing:0.14em; text-transform:uppercase;
-  color:var(--ink-soft);
-}
-
-.pub-right {
-  display:flex; flex-direction:column;
-  gap:0;
-  background:var(--cream);
-  border:1px solid rgba(14,15,13,0.07);
-  border-radius:16px;
-  overflow:hidden;
-  padding:8px;
-}
-
-.pub-card {
-  padding:20px 20px;
-  border-radius:10px;
-  transition:background .25s;
-  cursor:default;
-}
-.pub-card:hover { background:var(--white); }
-
-.pub-card-label {
-  font-family:'DM Mono',monospace; font-size:8px;
-  letter-spacing:0.12em; text-transform:uppercase;
-  color:var(--ink-faint); margin-bottom:6px;
-}
-.pub-card-title {
-  font-size:13px; font-weight:400;
-  color:var(--ink); line-height:1.5;
-  transition:color .25s;
-}
-.pub-card:hover .pub-card-title { color:var(--gold); }
+.pub-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.pub-art-card { background:var(--cream); border:1px solid rgba(14,15,13,0.08); border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; transition:border-color .3s, transform .3s; cursor:default; }
+.pub-art-card:hover { border-color:var(--art-color); transform:translateY(-3px); }
+.pub-art-cat { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--art-color); margin-bottom:12px; }
+.pub-art-title { font-family:'Unbounded',sans-serif; font-weight:700; font-size:13px; line-height:1.3; letter-spacing:-0.01em; color:var(--ink); margin-bottom:20px; flex:1; }
+.pub-art-footer { display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(14,15,13,0.07); padding-top:14px; margin-top:auto; }
+.pub-art-time { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); }
+.pub-art-status { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); }
 
 /* ── CLOSE ──────── */
 #close {
@@ -724,7 +693,12 @@ footer {
     gap:40px;
     padding:72px 20px;
   }
-  .pub-title { font-size:clamp(48px,13vw,72px); }
+  #publication { padding:64px 20px; }
+  .pub-top { flex-direction:column; align-items:flex-start; gap:16px; margin-bottom:32px; }
+  .pub-feat-card { grid-template-columns:1fr; }
+  .pub-feat-visual { min-height:240px; padding:36px 24px; }
+  .pub-feat-content { padding:28px 24px; }
+  .pub-grid { grid-template-columns:1fr; gap:12px; }
 
   /* Close */
   #close { padding:72px 20px; }
@@ -767,7 +741,7 @@ footer {
   .div-card { padding:40px 32px; }
   #manifesto { padding:80px 32px; }
   .manifesto-line { font-size:clamp(28px,4.5vw,56px); }
-  #publication { padding:80px 32px; gap:48px; }
+  #publication { padding:80px 32px; }
   #close { padding:80px 32px; }
   .close-inner { gap:48px; }
   footer { padding:28px 32px; }
@@ -992,28 +966,59 @@ footer {
 
 <!-- PUBLICATION -->
 <section id="publication">
-  <div class="pub-left reveal">
-    <div class="pub-label">Flagship Publication</div>
-    <h2 class="pub-title">CURRENT<br><span>FUTURE</span></h2>
-    <p class="pub-desc">ARM's authoritative editorial voice — written for future leaders and emerging professionals navigating the transition to the new digital economy.</p>
-    <div class="pub-sub-label">Newsletter · YouTube · In Production</div>
+  <div class="pub-top reveal">
+    <div class="pub-top-left">
+      <div class="pub-label">Flagship Publication</div>
+      <h2 class="pub-title">CURRENT<br><span>FUTURE</span></h2>
+      <p class="pub-desc">ARM's authoritative editorial voice — written for future leaders and emerging professionals navigating the transition to the new digital economy.</p>
+    </div>
+    <div class="pub-top-right">
+      <a href="/publication" class="pub-see-all">See all articles <span class="pub-see-arrow">→</span></a>
+    </div>
   </div>
-  <div class="pub-right reveal rd2">
-    <div class="pub-card">
-      <div class="pub-card-label">In production</div>
-      <div class="pub-card-title">Why Your Business Still Measures the Wrong Thing</div>
+
+  <div class="pub-featured reveal rd1">
+    <a href="/article-measures" class="pub-feat-card">
+      <div class="pub-feat-visual">
+        <div class="pub-feat-bg-word">MEASURE</div>
+        <div class="pub-feat-num">CF — 001</div>
+        <div class="pub-feat-title">WHY YOUR BUSINESS STILL MEASURES THE <em>WRONG THING.</em></div>
+      </div>
+      <div class="pub-feat-content">
+        <div class="pub-feat-cat"><span class="pub-feat-dot"></span>Advisory & Works</div>
+        <p class="pub-feat-desc">"The management infrastructure we built to run companies is descended from a framework designed for people shovelling iron. AI breaks the logic that made time-based measurement useful."</p>
+        <div class="pub-feat-meta">
+          <span class="pub-feat-time">8 min read</span>
+          <span class="pub-feat-status pub-feat-live">Live</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="pub-grid reveal rd2">
+    <div class="pub-art-card" style="--art-color:#C9A84C;">
+      <div class="pub-art-cat">Advisory & Works</div>
+      <div class="pub-art-title">The New Job Title Worth $300/Hour That Doesn't Have a Name Yet</div>
+      <div class="pub-art-footer">
+        <span class="pub-art-time">6 min read</span>
+        <span class="pub-art-status">In development</span>
+      </div>
     </div>
-    <div class="pub-card">
-      <div class="pub-card-label">In development</div>
-      <div class="pub-card-title">The New Job Title Worth $300/Hour That Doesn't Have a Name Yet</div>
+    <div class="pub-art-card" style="--art-color:#C9A84C;">
+      <div class="pub-art-cat">Advisory & Works</div>
+      <div class="pub-art-title">The Five Levels — From Execution to Sovereignty</div>
+      <div class="pub-art-footer">
+        <span class="pub-art-time">Series</span>
+        <span class="pub-art-status">Forthcoming</span>
+      </div>
     </div>
-    <div class="pub-card">
-      <div class="pub-card-label">Series</div>
-      <div class="pub-card-title">The Five Levels — From Execution to Sovereignty</div>
-    </div>
-    <div class="pub-card">
-      <div class="pub-card-label">Forthcoming</div>
-      <div class="pub-card-title">Humans in the Loop — AI Governance for the Clinical World</div>
+    <div class="pub-art-card" style="--art-color:#5C3D8F;">
+      <div class="pub-art-cat">AI Governance</div>
+      <div class="pub-art-title">Humans in the Loop — AI Governance for the Clinical World</div>
+      <div class="pub-art-footer">
+        <span class="pub-art-time">7 min read</span>
+        <span class="pub-art-status">Forthcoming</span>
+      </div>
     </div>
   </div>
 </section>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Business Still Measures the Wrong Thing — Current Future</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F1EA;
+  --cream2: #EDE8DE;
+  --white: #FFFFFF;
+  --ink: #0E0F0D;
+  --ink-mid: #3D3D38;
+  --ink-soft: #888880;
+  --ink-faint: #C2BFB6;
+  --gold: #C9A84C;
+  --gold-pale: rgba(201,168,76,0.1);
+  --black: #080B0A;
+  --reading-max: 680px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+.cur-dot{position:fixed;width:8px;height:8px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+.cur-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(14,15,13,0.15);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s cubic-bezier(.16,1,.3,1),height .2s cubic-bezier(.16,1,.3,1);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(14,15,13,0.07);}
+.nav-back{display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.nav-pub{font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;color:var(--ink);text-decoration:none;letter-spacing:0.02em;}
+.nav-pub span{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:20px;}
+.nav-share{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);background:none;border:1px solid rgba(14,15,13,0.12);padding:7px 14px;border-radius:2px;cursor:pointer;transition:all .2s;}
+.nav-share:hover{border-color:var(--ink);color:var(--ink);}
+
+/* PROGRESS BAR */
+.progress-bar{position:fixed;top:52px;left:0;height:2px;background:var(--gold);z-index:499;transition:width .1s linear;width:0%;}
+
+/* HERO VISUAL */
+#hero-visual{min-height:70vh;background:var(--black);display:flex;flex-direction:column;justify-content:flex-end;padding:80px 48px 60px;position:relative;overflow:hidden;margin-top:52px;}
+.hv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hv-glow{position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 65%);pointer-events:none;}
+.hv-num{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:rgba(255,255,255,0.2);margin-bottom:40px;opacity:0;animation:fadeUp .6s .3s ease forwards;}
+.hv-title{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(36px,6vw,88px);line-height:0.92;letter-spacing:-0.03em;color:var(--white);max-width:900px;position:relative;z-index:1;opacity:0;animation:fadeUp .9s .4s cubic-bezier(.16,1,.3,1) forwards;}
+.hv-title em{color:var(--gold);font-style:normal;}
+.hv-meta-row{display:flex;align-items:center;gap:24px;margin-top:40px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s .8s ease forwards;position:relative;z-index:1;}
+.hv-meta-item{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.hv-meta-item span{color:rgba(255,255,255,0.6);}
+.hv-meta-divider{width:1px;height:12px;background:rgba(255,255,255,0.1);}
+.hv-category{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);padding:5px 12px;border:1px solid rgba(201,168,76,0.3);border-radius:100px;}
+
+/* ARTICLE LAYOUT */
+.article-wrap{max-width:calc(var(--reading-max) + 96px);margin:0 auto;padding:0 48px;}
+
+/* INTRO */
+.article-intro{padding:72px 0 0;}
+.article-lede{font-family:'Instrument Serif',serif;font-size:clamp(20px,2.5vw,28px);line-height:1.55;color:var(--ink);font-style:italic;margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid rgba(14,15,13,0.1);}
+
+/* BODY */
+.article-body{padding:0 0 80px;}
+.article-body p{font-family:'Instrument Serif',serif;font-size:clamp(17px,1.8vw,20px);line-height:1.8;color:var(--ink-mid);margin-bottom:28px;font-weight:400;}
+.article-body p strong{color:var(--ink);font-weight:500;font-family:'DM Sans',sans-serif;font-size:0.85em;letter-spacing:0.02em;}
+
+.article-section{margin:60px 0 0;}
+.article-section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.article-section-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+.article-section-heading{font-family:'Unbounded',sans-serif;font-weight:700;font-size:clamp(20px,2.5vw,30px);line-height:1.1;letter-spacing:-0.02em;color:var(--ink);margin-bottom:28px;}
+
+/* PULL QUOTE */
+.pull-quote{margin:52px -48px;padding:52px 48px;background:var(--black);position:relative;overflow:hidden;}
+.pull-quote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);}
+.pull-quote-mark{font-family:'Instrument Serif',serif;font-size:72px;line-height:0.6;color:var(--gold);opacity:0.3;margin-bottom:16px;display:block;}
+.pull-quote-text{font-family:'Instrument Serif',serif;font-size:clamp(20px,2.8vw,32px);line-height:1.45;color:var(--white);font-style:italic;}
+.pull-quote-text em{color:var(--gold);font-style:normal;}
+.pull-quote-source{margin-top:20px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+
+/* HIGHLIGHT BOX */
+.highlight-box{margin:40px 0;padding:32px 36px;background:var(--cream);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;}
+.highlight-box p{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.8;color:var(--ink-mid);margin-bottom:0;font-weight:300;}
+.highlight-box p strong{color:var(--ink);font-weight:500;}
+
+/* RECALL ANCHOR */
+.recall-anchor{margin:52px 0;padding:40px 40px;background:var(--gold-pale);border:1px solid rgba(201,168,76,0.2);border-radius:12px;}
+.recall-anchor-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.recall-anchor-text{font-family:'Unbounded',sans-serif;font-weight:700;font-size:clamp(16px,2vw,22px);line-height:1.3;letter-spacing:-0.015em;color:var(--ink);}
+
+/* END MATTER */
+.article-end{padding:48px 0;border-top:1px solid rgba(14,15,13,0.1);margin-top:0;}
+.article-end-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px;}
+.article-end-pub{font-family:'Instrument Serif',serif;font-size:18px;font-style:italic;color:var(--ink-mid);line-height:1.6;}
+
+/* RELATED */
+#related{padding:72px 48px;background:var(--cream);border-top:1px solid rgba(14,15,13,0.08);}
+.related-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:32px;}
+.related-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.related-card{background:var(--white);border:1px solid rgba(14,15,13,0.08);border-radius:12px;padding:28px;transition:transform .3s,border-color .3s;text-decoration:none;display:block;}
+.related-card:hover{transform:translateY(-3px);border-color:var(--gold);}
+.related-card-cat{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.related-card-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:13px;line-height:1.3;letter-spacing:-0.01em;color:var(--ink);margin-bottom:8px;transition:color .25s;}
+.related-card:hover .related-card-title{color:var(--gold);}
+.related-card-status{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);}
+
+footer{background:var(--black);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;color:rgba(245,241,234,0.3);}
+.footer-logo-dot{color:var(--gold);}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-link{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,241,234,0.2);text-decoration:none;transition:color .2s;}
+.footer-link:hover{color:var(--gold);}
+.footer-copy{font-family:'DM Mono',monospace;font-size:8px;color:rgba(245,241,234,0.12);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  .cur-dot,.cur-ring{display:none;}body{cursor:auto;}
+  nav{padding:0 20px;}.nav-right{gap:12px;}
+  #hero-visual{padding:60px 20px 48px;min-height:60vh;}
+  .article-wrap{padding:0 20px;}
+  .pull-quote{margin:40px -20px;padding:36px 20px;}
+  .article-intro{padding:48px 0 0;}
+  #related{padding:48px 20px;}
+  .related-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;align-items:flex-start;padding:28px 20px;}
+}
+@media(min-width:769px)and(max-width:1024px){
+  nav{padding:0 32px;}
+  #hero-visual{padding:80px 32px 52px;}
+  .article-wrap{padding:0 32px;}
+  .related-grid{grid-template-columns:1fr 1fr;}
+  #related{padding:56px 32px;}
+  footer{padding:28px 32px;}
+}
+</style>
+</head>
+<body>
+<div class="cur-dot" id="curDot"></div>
+<div class="cur-ring" id="curRing"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <a href="/publication" class="nav-back">← Current Future</a>
+  <a href="/publication" class="nav-pub">CURRENT <span>FUTURE</span></a>
+  <div class="nav-right">
+    <button class="nav-share" onclick="copyLink()">Share</button>
+  </div>
+</nav>
+
+<!-- HERO VISUAL -->
+<section id="hero-visual">
+  <div class="hv-grid"></div>
+  <div class="hv-glow"></div>
+  <div class="hv-num">CF — 001 · Advisory & Works · Editorial</div>
+  <h1 class="hv-title">WHY YOUR BUSINESS<br>STILL MEASURES<br>THE <em>WRONG THING.</em></h1>
+  <div class="hv-meta-row">
+    <div class="hv-meta-item"><span>Current Future</span></div>
+    <div class="hv-meta-divider"></div>
+    <div class="hv-meta-item">Read time <span>8 minutes</span></div>
+    <div class="hv-meta-divider"></div>
+    <div class="hv-meta-item">Published <span>2025</span></div>
+    <div class="hv-meta-divider"></div>
+    <div class="hv-category">Advisory & Works</div>
+  </div>
+</section>
+
+<!-- ARTICLE -->
+<div class="article-wrap">
+
+  <div class="article-intro">
+    <p class="article-lede">You are probably measuring your business wrong. Not slightly wrong. Fundamentally wrong. And the reason has nothing to do with your tools, your team, or your strategy. It has to do with a management theory developed in 1911 for people shovelling iron.</p>
+  </div>
+
+  <div class="article-body">
+
+    <div class="article-section">
+      <div class="article-section-label">The Setup</div>
+      <div class="article-section-heading">Frederick Winslow Taylor and the problem that survived him</div>
+      <p>In 1911, a mechanical engineer named Frederick Winslow Taylor published a book called The Principles of Scientific Management. Taylor had one core idea: if you break work down into its smallest possible components and measure every one of them, you can optimise any process. He applied this to physical labour — how long it took to load a pig iron, how many shovels per minute, what the ideal shovel weight was.</p>
+      <p>It worked. For pig iron.</p>
+      <p>The problem is that the management infrastructure we built to run companies — the time sheets, the activity reports, the billable hours, the productivity reviews — is all descended from Taylor's framework. We took a measurement system designed for physical labour and applied it to thinking work. And for a long time, nobody noticed. Or nobody could afford to care.</p>
+    </div>
+
+    <div class="pull-quote">
+      <span class="pull-quote-mark">"</span>
+      <p class="pull-quote-text">When you measure a knowledge worker's output by time, you are measuring <em>presence, not value.</em> You are measuring the container, not the contents.</p>
+      <div class="pull-quote-source">Current Future — CF 001</div>
+    </div>
+
+    <div class="article-section">
+      <div class="article-section-label">The Measurement Problem</div>
+      <div class="article-section-heading">The measure punishes competence</div>
+      <p>A lawyer who solves your problem in twenty minutes charges less than one who takes two hours. A designer who gets it right on the first revision costs less than one who takes five. A consultant who can see the issue immediately earns less per hour than one who needs a month of research.</p>
+      <p>The measure punishes competence. That is not a side effect. That is what time-based measurement does when applied to thinking work.</p>
+
+      <div class="highlight-box">
+        <p><strong>Why did it survive so long?</strong> The reason time-based management survived is not that it was the best system. It's that it was the easiest system to administer. Time is legible. Outcomes are complicated. Counting hours requires a clock. Measuring the quality of a strategic decision requires judgment. Most organisations took the clock.</p>
+      </div>
+    </div>
+
+    <div class="article-section">
+      <div class="article-section-label">What AI Actually Changes</div>
+      <div class="article-section-heading">The old measurement system becomes actively misleading</div>
+      <p>Here is what AI does to this problem: it automates the parts of knowledge work that were most easily measured by time. The research. The first draft. The summary. The formatting. The initial analysis.</p>
+      <p>What's left is the part that was always the actual value: the judgment, the relationships, the taste, the strategic call.</p>
+      <p>And when the low-value-but-measurable part gets automated, the old measurement system doesn't just become less useful. It becomes actively misleading.</p>
+
+      <div class="pull-quote">
+        <span class="pull-quote-mark">"</span>
+        <p class="pull-quote-text">You cannot measure the value of a well-framed question. You cannot put a time stamp on knowing which problem to solve. You cannot bill by the hour for the <em>decade of context</em> that made the insight possible.</p>
+        <div class="pull-quote-source">Current Future — CF 001</div>
+      </div>
+
+      <p>The transition to outcome-based thinking is not a nice-to-have. It is the only coherent response to a world where the execution layer — the part you used to bill by the hour — has been partially automated away.</p>
+    </div>
+
+    <div class="article-section">
+      <div class="article-section-label">The Reframe</div>
+      <div class="article-section-heading">The question is not how long. It is what changed.</div>
+      <p>The question is not: how many hours did this take?</p>
+      <p>The question is: what changed?</p>
+      <p>That is it. That is the entire framework. What was the situation before? What is the situation after? What is the distance between those two points worth? That is what knowledge work has always been worth. We just had a management system that made it impossible to price correctly.</p>
+    </div>
+
+    <div class="recall-anchor">
+      <div class="recall-anchor-label">The Recall Anchor</div>
+      <div class="recall-anchor-text">Every morning, before you open your task list, ask one question: what will have changed by the end of today that couldn't have changed without me?</div>
+    </div>
+
+    <div class="article-section">
+      <p>If the answer is clear — a decision made, a problem solved, something built — your day is already defined. If the answer is nothing, that's the most useful data you've collected in months. Not because it means you were lazy. Because it means the system you're using to measure your day is hiding the real picture from you.</p>
+      <p>Once you can see the real picture clearly, you can start building something that actually measures what your work is worth. That is what this publication is for.</p>
+    </div>
+
+    <div class="article-end">
+      <div class="article-end-label">Current Future · ARM Digital Publishing</div>
+      <p class="article-end-pub">The old model was always wrong. We're building what comes next.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- RELATED -->
+<section id="related">
+  <div class="related-label">Continue reading</div>
+  <div class="related-grid">
+    <div class="related-card">
+      <div class="related-card-cat">Advisory & Works</div>
+      <div class="related-card-title">The New Job Title Worth $300/Hour That Doesn't Have a Name Yet</div>
+      <div class="related-card-status">In development</div>
+    </div>
+    <div class="related-card">
+      <div class="related-card-cat">Advisory & Works</div>
+      <div class="related-card-title">The Five Levels — From Execution to Sovereignty</div>
+      <div class="related-card-status">Forthcoming</div>
+    </div>
+    <div class="related-card">
+      <div class="related-card-cat">AI Governance</div>
+      <div class="related-card-title">Humans in the Loop — AI Governance for the Clinical World</div>
+      <div class="related-card-status">Forthcoming</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">ARM<span class="footer-logo-dot">.</span>Digital Publishing</span>
+  <div class="footer-links">
+    <a href="index.html" class="footer-link">Home</a>
+    <a href="/publication" class="footer-link">Current Future</a>
+    <a href="/advisory" class="footer-link">Advisory & Works</a>
+    <a href="/products" class="footer-link">Digital Products</a>
+    <a href="/governance" class="footer-link">AI Governance</a>
+    <a href="/estates" class="footer-link">Digital Estates</a>
+  </div>
+  <span class="footer-copy">© 2025 ARM Digital Publishing.</span>
+</footer>
+
+<script>
+const dot=document.getElementById('curDot'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+const isTouch=window.matchMedia('(hover:none)').matches;
+if(!isTouch){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function a(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+  document.querySelectorAll('a,button,.related-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{dot.style.width='12px';dot.style.height='12px';ring.style.width='48px';ring.style.height='48px';});
+    el.addEventListener('mouseleave',()=>{dot.style.width='8px';dot.style.height='8px';ring.style.width='34px';ring.style.height='34px';});
+  });
+}
+
+// Reading progress bar
+window.addEventListener('scroll',()=>{
+  const doc=document.documentElement;
+  const scrolled=(doc.scrollTop)/(doc.scrollHeight-doc.clientHeight)*100;
+  document.getElementById('progressBar').style.width=Math.min(scrolled,100)+'%';
+});
+
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    const btn=document.querySelector('.nav-share');
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Share',2000);
+  });
+}
+</script>
+</body>
+</html>
